@@ -1,0 +1,17 @@
+{
+   "name": "Tinder",
+   "version": "0.0.1",
+   "description": "Awesome project developed with TypeORM.",
+   "devDependencies": {
+      "@types/node": "^11.11.6",
+      "ts-node": "8.0.3",
+      "typescript": "3.3.4000"
+   },
+   "dependencies": {
+      "reflect-metadata": "^0.1.10",
+      "typeorm": "0.2.15"
+   },
+   "scripts": {
+      "start": "ts-node src/index.ts"
+   }
+}
