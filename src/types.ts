@@ -76,17 +76,10 @@ export namespace UserResolvers {
   export interface Resolvers<TContext = MyContext, TypeParent = User> {
     id?: IdResolver<string, TypeParent, TContext>;
 
-    username?: UsernameResolver<string, TypeParent, TContext>;
-
     email?: EmailResolver<string, TypeParent, TContext>;
   }
 
   export type IdResolver<
-    R = string,
-    Parent = User,
-    TContext = MyContext
-  > = Resolver<R, Parent, TContext>;
-  export type UsernameResolver<
     R = string,
     Parent = User,
     TContext = MyContext
@@ -204,8 +197,6 @@ export interface Query {
 
 export interface User {
   id: string;
-
-  username: string;
 
   email: string;
 }

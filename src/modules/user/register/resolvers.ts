@@ -6,12 +6,6 @@ import { User } from "../../../entity/User";
 import { formatYupError } from "../../../utils/formatYupErrors";
 
 export const registerSchema = yup.object().shape({
-  username: yup
-    .string()
-    .matches(/^[a-zA-Z0-9]*$/, "username can only contain letters and numbers")
-    .min(3)
-    .max(30)
-    .required(),
   email: yup
     .string()
     .email()
@@ -35,14 +29,13 @@ export const resolvers: MutationResolvers.Resolvers = {
       };
     }
 
-    const { email, username, password } = input;
+    const { email, password } = input;
 
     const hashedPassword = await argon.hash(password);
 
     try {
       await User.create({
         email,
-        username,
         password: hashedPassword
       }).save();
     } catch (err) {
@@ -55,15 +48,6 @@ export const resolvers: MutationResolvers.Resolvers = {
               {
                 path: "email",
                 message: "email already in use"
-              }
-            ]
-          };
-        } else if (detail.includes("username")) {
-          return {
-            errors: [
-              {
-                path: "username",
-                message: "username already taken"
               }
             ]
           };
