@@ -1,28 +1,14 @@
 import * as argon from "argon2";
-import * as yup from "yup";
 
 import { MutationResolvers } from "../../../types";
 import { User } from "../../../entity/User";
 import { formatYupError } from "../../../utils/formatYupErrors";
-
-export const registerSchema = yup.object().shape({
-  email: yup
-    .string()
-    .email()
-    .min(3)
-    .max(500)
-    .required(),
-  password: yup
-    .string()
-    .min(5)
-    .max(1000)
-    .required()
-});
+import { validUserSchema } from "@tinder/common";
 
 export const resolvers: MutationResolvers.Resolvers = {
   register: async (_, { input }) => {
     try {
-      await registerSchema.validate(input, { abortEarly: false });
+      await validUserSchema.validate(input, { abortEarly: false });
     } catch (err) {
       return {
         errors: formatYupError(err)
