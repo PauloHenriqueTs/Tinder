@@ -21,7 +21,7 @@
     "skipLibCheck": true,
     "baseUrl": "..",
     "paths": {
-      "@abb/*": ["./*/src"]
+      "@tinder/*": ["./*/src"]
     }
   },
   "exclude": ["node_modules"],
