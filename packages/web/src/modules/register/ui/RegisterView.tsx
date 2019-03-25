@@ -3,20 +3,18 @@ import * as Antd from "antd";
 import { withFormik, FormikErrors, FormikProps, Field, Form } from "formik";
 import { validUserSchema } from "@tinder/common";
 import { InputField } from "../../shared/InputField";
+import { RegisterInput } from "@tinder/controller/dist/types";
 
 const { Form: AntForm, Icon, Button } = Antd;
 const FormItem = AntForm.Item;
 
-interface FormValues {
-  email: string;
-  password: string;
-}
-
 interface Props {
-  submit: (values: FormValues) => Promise<FormikErrors<FormValues> | null>;
+  submit: (
+    values: RegisterInput
+  ) => Promise<FormikErrors<RegisterInput> | null>;
 }
 
-class C extends React.PureComponent<FormikProps<FormValues> & Props> {
+class C extends React.PureComponent<FormikProps<RegisterInput> & Props> {
   render() {
     return (
       <Form style={{ display: "flex" }}>
@@ -65,7 +63,7 @@ class C extends React.PureComponent<FormikProps<FormValues> & Props> {
   }
 }
 
-export const RegisterView = withFormik<Props, FormValues>({
+export const RegisterView = withFormik<Props, RegisterInput>({
   validationSchema: validUserSchema,
   mapPropsToValues: () => ({ email: "", password: "" }),
   handleSubmit: async (values, { props, setErrors }) => {

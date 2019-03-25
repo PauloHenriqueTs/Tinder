@@ -184,6 +184,45 @@
     import-from "2.1.0"
     tslib "1.9.3"
 
+"@graphql-codegen/typescript-operations@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-operations/-/typescript-operations-1.0.3.tgz#3a4957ebc5be993a82767bb064588660ed9df0f0"
+  integrity sha512-kEdP3GiCg9kjL7Ead+EN4BbjHvqKlsK9lkWUGsnvPTuDjiD9ILhFLecdCEIpsvtzd42Fhw9v7pVO882vMjEANA==
+  dependencies:
+    "@graphql-codegen/plugin-helpers" "1.0.3"
+    "@graphql-codegen/typescript" "1.0.3"
+    "@graphql-codegen/visitor-plugin-common" "1.0.3"
+    tslib "1.9.3"
+
+"@graphql-codegen/typescript-react-apollo@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-react-apollo/-/typescript-react-apollo-1.0.3.tgz#42b90cfb66ab6485ab89a06358481cf9a5d81f7f"
+  integrity sha512-MiK1ukzOtqlQ0bzbNaZM/+IZSGLMwzCoodJqENwx8ZELdNFVmZV+EPvqDjHEjpd/GbiQaOKHwi1s5ZIGvkZAcg==
+  dependencies:
+    "@graphql-codegen/plugin-helpers" "1.0.3"
+    "@graphql-codegen/visitor-plugin-common" "1.0.3"
+    tslib "1.9.3"
+
+"@graphql-codegen/typescript@1.0.3", "@graphql-codegen/typescript@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript/-/typescript-1.0.3.tgz#88aaeedef484d2eba2d6c7fb060e582307f53e86"
+  integrity sha512-gBqpyqIoFhxYx04Y5q6oWoHWLRYOHatSSlIXpGN03aDpsHjSeYpGkUoXqaUQn+xhmuFfBCAMAIHUHEP8mqXnNg==
+  dependencies:
+    "@graphql-codegen/plugin-helpers" "1.0.3"
+    "@graphql-codegen/visitor-plugin-common" "1.0.3"
+    tslib "1.9.3"
+
+"@graphql-codegen/visitor-plugin-common@1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/visitor-plugin-common/-/visitor-plugin-common-1.0.3.tgz#53cafc8506606dba389514952738f751dc6dda69"
+  integrity sha512-B9ejJEh3M91pR0bjYoMqOUmFGwjlD2miEP16rOljV9mdsYXdU+533Lr49zm35oEvPLIrwgNbIaiVF2Bvvfg2Zw==
+  dependencies:
+    "@graphql-codegen/plugin-helpers" "1.0.3"
+    auto-bind "2.0.0"
+    dependency-graph "0.8.0"
+    graphql-tag "2.10.1"
+    tslib "1.9.3"
+
 "@graphql-modules/epoxy@0.2.4":
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/@graphql-modules/epoxy/-/epoxy-0.2.4.tgz#0571e232d4aa48d21c0213dab2c75e91fd04f129"
@@ -1255,6 +1294,11 @@ atob@^2.1.1:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
+
+auto-bind@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/auto-bind/-/auto-bind-2.0.0.tgz#9a55a461b521f58daf955169203bed1a07a970a9"
+  integrity sha512-rvRBv0/O7iriUMqSzTDhAfyAD1vVnElAEruo5rMSFeYLA0iKDEzLPSJiwMnL86+IPpTlhfOIAzjoKZ9TaySYdA==
 
 autoprefixer@7.1.6:
   version "7.1.6"
@@ -3753,6 +3797,11 @@ depd@~1.1.1, depd@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/depd/-/depd-1.1.2.tgz#9bcd52e14c097763e749b274c4346ed2e560b5a9"
   integrity sha1-m81S4UwJd2PnSbJ0xDRu0uVgtak=
+
+dependency-graph@0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/dependency-graph/-/dependency-graph-0.8.0.tgz#2da2d35ed852ecc24a5d6c17788ba57c3708755b"
+  integrity sha512-DCvzSq2UiMsuLnj/9AL484ummEgLtZIcRS7YvtO38QnpX3vqh9nJ8P+zhu8Ja+SmLrBHO2iDbva20jq38qvBkQ==
 
 deprecated-decorator@^0.1.6:
   version "0.1.6"
