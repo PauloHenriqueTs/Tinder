@@ -25,7 +25,6 @@ export const resolvers: MutationResolvers.Resolvers = {
         password: hashedPassword
       }).save();
     } catch (err) {
-      console.log(err);
       const { detail } = err;
       if (detail.includes("already exists.")) {
         if (detail.includes("email")) {

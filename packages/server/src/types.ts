@@ -1,8 +1,12 @@
 export type Maybe<T> = T | null;
 
-export interface RegisterInput {
-  username: string;
+export interface LoginInput {
+  email: string;
 
+  password: string;
+}
+
+export interface RegisterInput {
   email: string;
 
   password: string;
@@ -93,9 +97,27 @@ export namespace UserResolvers {
 
 export namespace MutationResolvers {
   export interface Resolvers<TContext = MyContext, TypeParent = {}> {
+    login?: LoginResolver<LoginResponse, TypeParent, TContext>;
+
+    logout?: LogoutResolver<boolean, TypeParent, TContext>;
+
     register?: RegisterResolver<RegisterResponse, TypeParent, TContext>;
   }
 
+  export type LoginResolver<
+    R = LoginResponse,
+    Parent = {},
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext, LoginArgs>;
+  export interface LoginArgs {
+    input: LoginInput;
+  }
+
+  export type LogoutResolver<
+    R = boolean,
+    Parent = {},
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext>;
   export type RegisterResolver<
     R = RegisterResponse,
     Parent = {},
@@ -106,17 +128,21 @@ export namespace MutationResolvers {
   }
 }
 
-export namespace RegisterResponseResolvers {
-  export interface Resolvers<
-    TContext = MyContext,
-    TypeParent = RegisterResponse
-  > {
+export namespace LoginResponseResolvers {
+  export interface Resolvers<TContext = MyContext, TypeParent = LoginResponse> {
     errors?: ErrorsResolver<Maybe<Error[]>, TypeParent, TContext>;
+
+    sessionId?: SessionIdResolver<Maybe<string>, TypeParent, TContext>;
   }
 
   export type ErrorsResolver<
     R = Maybe<Error[]>,
-    Parent = RegisterResponse,
+    Parent = LoginResponse,
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext>;
+  export type SessionIdResolver<
+    R = Maybe<string>,
+    Parent = LoginResponse,
     TContext = MyContext
   > = Resolver<R, Parent, TContext>;
 }
@@ -136,6 +162,21 @@ export namespace ErrorResolvers {
   export type MessageResolver<
     R = string,
     Parent = Error,
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace RegisterResponseResolvers {
+  export interface Resolvers<
+    TContext = MyContext,
+    TypeParent = RegisterResponse
+  > {
+    errors?: ErrorsResolver<Maybe<Error[]>, TypeParent, TContext>;
+  }
+
+  export type ErrorsResolver<
+    R = Maybe<Error[]>,
+    Parent = RegisterResponse,
     TContext = MyContext
   > = Resolver<R, Parent, TContext>;
 }
@@ -177,8 +218,9 @@ export type IResolvers<TContext = MyContext> = {
   Query?: QueryResolvers.Resolvers<TContext>;
   User?: UserResolvers.Resolvers<TContext>;
   Mutation?: MutationResolvers.Resolvers<TContext>;
-  RegisterResponse?: RegisterResponseResolvers.Resolvers<TContext>;
+  LoginResponse?: LoginResponseResolvers.Resolvers<TContext>;
   Error?: ErrorResolvers.Resolvers<TContext>;
+  RegisterResponse?: RegisterResponseResolvers.Resolvers<TContext>;
 } & { [typeName: string]: never };
 
 export type IDirectiveResolvers<Result> = {
@@ -202,11 +244,17 @@ export interface User {
 }
 
 export interface Mutation {
+  login: LoginResponse;
+
+  logout: boolean;
+
   register: RegisterResponse;
 }
 
-export interface RegisterResponse {
+export interface LoginResponse {
   errors?: Maybe<Error[]>;
+
+  sessionId?: Maybe<string>;
 }
 
 export interface Error {
@@ -215,10 +263,17 @@ export interface Error {
   message: string;
 }
 
+export interface RegisterResponse {
+  errors?: Maybe<Error[]>;
+}
+
 // ====================================================
 // Arguments
 // ====================================================
 
+export interface LoginMutationArgs {
+  input: LoginInput;
+}
 export interface RegisterMutationArgs {
   input: RegisterInput;
 }
