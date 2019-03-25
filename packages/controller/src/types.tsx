@@ -54,6 +54,33 @@ export type User = {
   id: Scalars["ID"];
   email: Scalars["String"];
 };
+export type LoginMutationMutationVariables = {
+  email: Scalars["String"];
+  password: Scalars["String"];
+};
+
+export type LoginMutationMutation = { __typename?: "Mutation" } & {
+  login: { __typename?: "LoginResponse" } & {
+    errors: Maybe<
+      Array<{ __typename?: "Error" } & Pick<Error, "message" | "path">>
+    >;
+    user: Maybe<{ __typename?: "User" } & Pick<User, "id" | "email">>;
+  };
+};
+
+export type LogoutMutationMutationVariables = {};
+
+export type LogoutMutationMutation = { __typename?: "Mutation" } & Pick<
+  Mutation,
+  "logout"
+>;
+
+export type MeQueryQueryVariables = {};
+
+export type MeQueryQuery = { __typename?: "Query" } & {
+  me: Maybe<{ __typename?: "User" } & Pick<User, "id" | "email">>;
+};
+
 export type RegisterMutationMutationVariables = {
   email: Scalars["String"];
   password: Scalars["String"];
@@ -71,6 +98,162 @@ import gql from "graphql-tag";
 import * as React from "react";
 import * as ReactApollo from "react-apollo";
 
+export const LoginMutationDocument = gql`
+  mutation LoginMutation($email: String!, $password: String!) {
+    login(input: { email: $email, password: $password }) {
+      errors {
+        message
+        path
+      }
+      user {
+        id
+        email
+      }
+    }
+  }
+`;
+
+export class LoginMutationComponent extends React.Component<
+  Partial<
+    ReactApollo.MutationProps<
+      LoginMutationMutation,
+      LoginMutationMutationVariables
+    >
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<
+        LoginMutationMutation,
+        LoginMutationMutationVariables
+      >
+        mutation={LoginMutationDocument}
+        {...(this as any)["props"] as any}
+      />
+    );
+  }
+}
+export type LoginMutationProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<LoginMutationMutation, LoginMutationMutationVariables>
+> &
+  TChildProps;
+export type LoginMutationMutationFn = ReactApollo.MutationFn<
+  LoginMutationMutation,
+  LoginMutationMutationVariables
+>;
+export function withLoginMutation<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        LoginMutationMutation,
+        LoginMutationMutationVariables,
+        LoginMutationProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    LoginMutationMutation,
+    LoginMutationMutationVariables,
+    LoginMutationProps<TChildProps>
+  >(LoginMutationDocument, operationOptions);
+}
+export const LogoutMutationDocument = gql`
+  mutation LogoutMutation {
+    logout
+  }
+`;
+
+export class LogoutMutationComponent extends React.Component<
+  Partial<
+    ReactApollo.MutationProps<
+      LogoutMutationMutation,
+      LogoutMutationMutationVariables
+    >
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<
+        LogoutMutationMutation,
+        LogoutMutationMutationVariables
+      >
+        mutation={LogoutMutationDocument}
+        {...(this as any)["props"] as any}
+      />
+    );
+  }
+}
+export type LogoutMutationProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<
+    LogoutMutationMutation,
+    LogoutMutationMutationVariables
+  >
+> &
+  TChildProps;
+export type LogoutMutationMutationFn = ReactApollo.MutationFn<
+  LogoutMutationMutation,
+  LogoutMutationMutationVariables
+>;
+export function withLogoutMutation<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        LogoutMutationMutation,
+        LogoutMutationMutationVariables,
+        LogoutMutationProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    LogoutMutationMutation,
+    LogoutMutationMutationVariables,
+    LogoutMutationProps<TChildProps>
+  >(LogoutMutationDocument, operationOptions);
+}
+export const MeQueryDocument = gql`
+  query MeQuery {
+    me {
+      id
+      email
+    }
+  }
+`;
+
+export class MeQueryComponent extends React.Component<
+  Partial<ReactApollo.QueryProps<MeQueryQuery, MeQueryQueryVariables>>
+> {
+  render() {
+    return (
+      <ReactApollo.Query<MeQueryQuery, MeQueryQueryVariables>
+        query={MeQueryDocument}
+        {...(this as any)["props"] as any}
+      />
+    );
+  }
+}
+export type MeQueryProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<MeQueryQuery, MeQueryQueryVariables>
+> &
+  TChildProps;
+export function withMeQuery<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        MeQueryQuery,
+        MeQueryQueryVariables,
+        MeQueryProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    MeQueryQuery,
+    MeQueryQueryVariables,
+    MeQueryProps<TChildProps>
+  >(MeQueryDocument, operationOptions);
+}
 export const RegisterMutationDocument = gql`
   mutation RegisterMutation($email: String!, $password: String!) {
     register(input: { email: $email, password: $password }) {

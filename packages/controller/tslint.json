@@ -5,6 +5,8 @@
   },
   "rules": {
     "interface-over-type-literal": false,
-    "array-type": false
+    "array-type": false,
+    "jsx-no-multiline-js": false,
+    "jsx-curly-spacing": false
   }
 }

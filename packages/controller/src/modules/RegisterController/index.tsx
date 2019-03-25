@@ -1,9 +1,9 @@
 import * as React from "react";
 import { graphql, ChildMutateProps } from "react-apollo";
-import gql from "graphql-tag";
 import {
   RegisterMutationMutation,
-  RegisterMutationMutationVariables
+  RegisterMutationMutationVariables,
+  RegisterMutationDocument
 } from "../../types";
 import { normalizeErrors } from "../../utils/normalizeErrors";
 import { NormalizedErrorMap } from "../../types/NormalizedErrorMap";
@@ -43,19 +43,8 @@ class C extends React.PureComponent<
   }
 }
 
-const registerMutation = gql`
-  mutation RegisterMutation($email: String!, $password: String!) {
-    register(input: { email: $email, password: $password }) {
-      errors {
-        path
-        message
-      }
-    }
-  }
-`;
-
 export const RegisterController = graphql<
   Props,
   RegisterMutationMutation,
   RegisterMutationMutationVariables
->(registerMutation)(C);
+>(RegisterMutationDocument)(C);
