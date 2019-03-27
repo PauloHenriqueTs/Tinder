@@ -8,7 +8,7 @@ import * as cors from "cors";
 import { createTypeormConn } from "./createTypeormConn";
 import { createSchema } from "./createSchema";
 import { redis } from "./redis";
-
+import { redisSessionPrefix } from "./constants";
 // @todo move to .env
 const SESSION_SECRET = "ajslkjalksjdfkl";
 const RedisStore = connectRedis(session);
@@ -33,8 +33,10 @@ const startServer = async () => {
   app.use(
     session({
       store: new RedisStore({
-        client: redis as any
+        client: redis as any,
+        prefix: redisSessionPrefix
       }),
+      name: "qid",
       secret: SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
@@ -49,6 +51,8 @@ const startServer = async () => {
   const server = new ApolloServer({
     schema: createSchema(),
     context: ({ req, res }: any) => ({
+      redis,
+      session: req.session,
       req,
       res
     })

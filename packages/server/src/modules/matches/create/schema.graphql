@@ -1,0 +1,13 @@
+scalar Upload
+
+input CreateMatcheInput {
+  name: String!
+  picture: Upload
+  description: String!
+  latitude: Float!
+  longitude: Float!
+}
+
+type Mutation {
+  createMatche(input: CreateMatcheInput!): Boolean!
+}

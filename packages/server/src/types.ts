@@ -1,5 +1,13 @@
 export type Maybe<T> = T | null;
 
+export interface Upload {
+  filename: string;
+
+  mimetype: string;
+
+  encoding: string;
+}
+
 export interface LoginInput {
   email: string;
 
@@ -97,11 +105,22 @@ export namespace UserResolvers {
 
 export namespace MutationResolvers {
   export interface Resolvers<TContext = MyContext, TypeParent = {}> {
+    singleUpload?: SingleUploadResolver<Maybe<boolean>, TypeParent, TContext>;
+
     login?: LoginResolver<LoginResponse, TypeParent, TContext>;
 
     logout?: LogoutResolver<boolean, TypeParent, TContext>;
 
     register?: RegisterResolver<RegisterResponse, TypeParent, TContext>;
+  }
+
+  export type SingleUploadResolver<
+    R = Maybe<boolean>,
+    Parent = {},
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext, SingleUploadArgs>;
+  export interface SingleUploadArgs {
+    file: Upload;
   }
 
   export type LoginResolver<
@@ -132,7 +151,7 @@ export namespace LoginResponseResolvers {
   export interface Resolvers<TContext = MyContext, TypeParent = LoginResponse> {
     errors?: ErrorsResolver<Maybe<Error[]>, TypeParent, TContext>;
 
-    sessionId?: SessionIdResolver<Maybe<string>, TypeParent, TContext>;
+    user?: UserResolver<Maybe<User>, TypeParent, TContext>;
   }
 
   export type ErrorsResolver<
@@ -140,8 +159,8 @@ export namespace LoginResponseResolvers {
     Parent = LoginResponse,
     TContext = MyContext
   > = Resolver<R, Parent, TContext>;
-  export type SessionIdResolver<
-    R = Maybe<string>,
+  export type UserResolver<
+    R = Maybe<User>,
     Parent = LoginResponse,
     TContext = MyContext
   > = Resolver<R, Parent, TContext>;
@@ -244,6 +263,8 @@ export interface User {
 }
 
 export interface Mutation {
+  singleUpload?: Maybe<boolean>;
+
   login: LoginResponse;
 
   logout: boolean;
@@ -254,7 +275,7 @@ export interface Mutation {
 export interface LoginResponse {
   errors?: Maybe<Error[]>;
 
-  sessionId?: Maybe<string>;
+  user?: Maybe<User>;
 }
 
 export interface Error {
@@ -271,6 +292,9 @@ export interface RegisterResponse {
 // Arguments
 // ====================================================
 
+export interface SingleUploadMutationArgs {
+  file: Upload;
+}
 export interface LoginMutationArgs {
   input: LoginInput;
 }

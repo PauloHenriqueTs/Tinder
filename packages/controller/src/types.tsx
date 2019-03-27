@@ -6,6 +6,15 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  Upload: any;
+};
+
+export type CreateMatcheInput = {
+  name: Scalars["String"];
+  picture?: Maybe<Scalars["Upload"]>;
+  description: Scalars["String"];
+  latitude: Scalars["Float"];
+  longitude: Scalars["Float"];
 };
 
 export type Error = {
@@ -24,9 +33,14 @@ export type LoginResponse = {
 };
 
 export type Mutation = {
+  createMatche: Scalars["Boolean"];
   login: LoginResponse;
   logout: Scalars["Boolean"];
   register: RegisterResponse;
+};
+
+export type MutationCreateMatcheArgs = {
+  input: CreateMatcheInput;
 };
 
 export type MutationLoginArgs = {
@@ -54,6 +68,19 @@ export type User = {
   id: Scalars["ID"];
   email: Scalars["String"];
 };
+export type CreateMatcheMutationVariables = {
+  picture?: Maybe<Scalars["Upload"]>;
+  name: Scalars["String"];
+  description: Scalars["String"];
+  latitude: Scalars["Float"];
+  longitude: Scalars["Float"];
+};
+
+export type CreateMatcheMutation = { __typename?: "Mutation" } & Pick<
+  Mutation,
+  "createMatche"
+>;
+
 export type LoginMutationMutationVariables = {
   email: Scalars["String"];
   password: Scalars["String"];
@@ -98,6 +125,68 @@ import gql from "graphql-tag";
 import * as React from "react";
 import * as ReactApollo from "react-apollo";
 
+export const CreateMatcheDocument = gql`
+  mutation CreateMatche(
+    $picture: Upload
+    $name: String!
+    $description: String!
+    $latitude: Float!
+    $longitude: Float!
+  ) {
+    createMatche(
+      input: {
+        picture: $picture
+        name: $name
+        description: $description
+        latitude: $latitude
+        longitude: $longitude
+      }
+    )
+  }
+`;
+
+export class CreateMatcheComponent extends React.Component<
+  Partial<
+    ReactApollo.MutationProps<
+      CreateMatcheMutation,
+      CreateMatcheMutationVariables
+    >
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<CreateMatcheMutation, CreateMatcheMutationVariables>
+        mutation={CreateMatcheDocument}
+        {...(this as any)["props"] as any}
+      />
+    );
+  }
+}
+export type CreateMatcheProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<CreateMatcheMutation, CreateMatcheMutationVariables>
+> &
+  TChildProps;
+export type CreateMatcheMutationFn = ReactApollo.MutationFn<
+  CreateMatcheMutation,
+  CreateMatcheMutationVariables
+>;
+export function withCreateMatche<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        CreateMatcheMutation,
+        CreateMatcheMutationVariables,
+        CreateMatcheProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    CreateMatcheMutation,
+    CreateMatcheMutationVariables,
+    CreateMatcheProps<TChildProps>
+  >(CreateMatcheDocument, operationOptions);
+}
 export const LoginMutationDocument = gql`
   mutation LoginMutation($email: String!, $password: String!) {
     login(input: { email: $email, password: $password }) {
