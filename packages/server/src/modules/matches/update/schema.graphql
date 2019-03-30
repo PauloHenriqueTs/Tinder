@@ -1,0 +1,11 @@
+input UpdateMatcheInput {
+  name: String!
+  picture: Upload
+  description: String!
+  latitude: Float!
+  longitude: Float!
+}
+
+type Mutation {
+  updateMatche(MatcheId: String!, input: UpdateMatcheInput!): Boolean!
+}

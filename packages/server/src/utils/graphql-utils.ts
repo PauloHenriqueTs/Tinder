@@ -1,5 +1,9 @@
 import { Redis } from "ioredis";
 import * as express from "express";
+
+import { userLoader } from "../loaders/UserLoader";
+import { PubSub } from "graphql-yoga";
+
 export interface Session extends Express.Session {
   userId?: string;
 }
@@ -9,6 +13,8 @@ export interface Context {
   session: Session;
   req: Express.Request;
   res: express.Response;
+  userLoader: ReturnType<typeof userLoader>;
+  pubsub: PubSub;
 }
 export type Resolver = (
   parent: any,

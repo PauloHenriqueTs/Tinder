@@ -4,11 +4,14 @@ import * as express from "express";
 import * as session from "express-session";
 import * as connectRedis from "connect-redis";
 import * as cors from "cors";
+import { RedisPubSub } from "graphql-redis-subscriptions";
 
 import { createTypeormConn } from "./createTypeormConn";
 import { createSchema } from "./createSchema";
 import { redis } from "./redis";
 import { redisSessionPrefix } from "./constants";
+import { userLoader } from "./loaders/UserLoader";
+
 // @todo move to .env
 const SESSION_SECRET = "ajslkjalksjdfkl";
 const RedisStore = connectRedis(session);
@@ -21,6 +24,13 @@ const corsOptions = {
       : "http://localhost:3000"
 };
 
+const pubsub = new RedisPubSub(
+  process.env.NODE_ENV === "production"
+    ? {
+        connection: process.env.REDIS_URL as any
+      }
+    : {}
+);
 const startServer = async () => {
   await createTypeormConn();
 
@@ -47,14 +57,18 @@ const startServer = async () => {
       }
     })
   );
+  app.use("/images", express.static("images"));
 
   const server = new ApolloServer({
     schema: createSchema(),
     context: ({ req, res }: any) => ({
       redis,
+      url: req ? req.protocol + "://" + req.get("host") : "",
       session: req.session,
       req,
-      res
+      res,
+      userLoader: userLoader(),
+      pubsub
     })
   });
 

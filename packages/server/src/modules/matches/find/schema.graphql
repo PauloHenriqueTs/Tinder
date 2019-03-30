@@ -1,0 +1,13 @@
+type Matches {
+  id: ID!
+  name: String!
+  pictureUrl: String
+  description: String!
+  latitude: Float!
+  longitude: Float!
+  user: User!
+}
+
+type Query {
+  findMatches: [Matches!]!
+}
