@@ -2,7 +2,7 @@ import { Redis } from "ioredis";
 import * as express from "express";
 
 import { userLoader } from "../loaders/UserLoader";
-import { PubSub } from "graphql-yoga";
+import { PubSub } from "apollo-server";
 
 export interface Session extends Express.Session {
   userId?: string;

@@ -27,7 +27,7 @@
     "apollo-upload-client": "^10.0.0",
     "apollo-utilities": "^1.2.1",
     "formik": "^0.11.11",
-    "graphql": "^0.13.2",
+    "graphql": "^14.2.0",
     "graphql-tag": "^2.9.2",
     "history": "^4.9.0",
     "react": "^16.4.0",
@@ -35,7 +35,6 @@
     "react-dom": "^16.4.0",
     "react-dropzone": "4.2.13",
     "react-geolocated": "^2.4.1",
-    "react-geolocation": "^1.0.4",
     "react-router-dom": "^4.3.1",
     "yup": "^0.25.1"
   },

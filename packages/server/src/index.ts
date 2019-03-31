@@ -1,17 +1,19 @@
 import "reflect-metadata";
 import { ApolloServer } from "apollo-server-express";
+import { PubSub } from "apollo-server";
 import * as express from "express";
 import * as session from "express-session";
 import * as connectRedis from "connect-redis";
 import * as cors from "cors";
-import { RedisPubSub } from "graphql-redis-subscriptions";
 
 import { createTypeormConn } from "./createTypeormConn";
 import { createSchema } from "./createSchema";
 import { redis } from "./redis";
 import { redisSessionPrefix } from "./constants";
 import { userLoader } from "./loaders/UserLoader";
-
+import * as fs from "fs";
+import * as https from "https";
+import * as http from "http";
 // @todo move to .env
 const SESSION_SECRET = "ajslkjalksjdfkl";
 const RedisStore = connectRedis(session);
@@ -24,14 +26,17 @@ const corsOptions = {
       : "http://localhost:3000"
 };
 
-const pubsub = new RedisPubSub(
-  process.env.NODE_ENV === "production"
-    ? {
-        connection: process.env.REDIS_URL as any
-      }
-    : {}
-);
+const pubsub = new PubSub();
+
 const startServer = async () => {
+  const configurations: any = {
+    // Note: You may need sudo to run on port 443
+    production: { ssl: true, port: 443, hostname: "example.com" },
+    development: { ssl: false, port: 4000, hostname: "localhost" }
+  };
+  const environment = process.env.NODE_ENV || "production";
+  const config = configurations[environment];
+
   await createTypeormConn();
 
   const app = express();
@@ -59,12 +64,12 @@ const startServer = async () => {
   );
   app.use("/images", express.static("images"));
 
-  const server = new ApolloServer({
+  const apollo = new ApolloServer({
     schema: createSchema(),
     context: ({ req, res }: any) => ({
       redis,
       url: req ? req.protocol + "://" + req.get("host") : "",
-      session: req.session,
+      session: req ? req.session : undefined,
       req,
       res,
       userLoader: userLoader(),
@@ -72,13 +77,34 @@ const startServer = async () => {
     })
   });
 
-  server.applyMiddleware({
+  apollo.applyMiddleware({
     app,
     cors: false
   });
 
-  app.listen({ port: 4000 }, () =>
-    console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+  let server: any;
+  if (config.ssl) {
+    // Assumes certificates are in .ssl folder from package root. Make sure the files
+    // are secured.
+    server = https.createServer(
+      {
+        key: fs.readFileSync(`./ssl/${environment}/server.key`),
+        cert: fs.readFileSync(`./ssl/${environment}/server.crt`)
+      },
+      app
+    );
+  } else {
+    server = http.createServer(app);
+  }
+  apollo.installSubscriptionHandlers(server);
+
+  server.listen({ port: config.port }, () =>
+    console.log(
+      "🚀 Server ready at",
+      `http${config.ssl ? "s" : ""}://${config.hostname}:${config.port}${
+        apollo.graphqlPath
+      }`
+    )
   );
 };
 
