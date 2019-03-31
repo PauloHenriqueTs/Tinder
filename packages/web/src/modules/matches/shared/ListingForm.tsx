@@ -60,11 +60,7 @@ export class ListingForm extends React.PureComponent<Props, any> {
                   }}
                 >
                   <div>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      disabled={isSubmitting}
-                    >
+                    <Button htmlType="submit" disabled={isSubmitting}>
                       create listing
                     </Button>
                   </div>

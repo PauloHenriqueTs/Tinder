@@ -45,11 +45,7 @@ class C extends React.PureComponent<FormikProps<FormValues> & Props> {
             <Link to="/forgot-password">Forgot password</Link>
           </FormItem>
           <FormItem>
-            <Button
-              type="primary"
-              htmlType="submit"
-              className="login-form-button"
-            >
+            <Button htmlType="submit" className="login-form-button">
               login
             </Button>
           </FormItem>

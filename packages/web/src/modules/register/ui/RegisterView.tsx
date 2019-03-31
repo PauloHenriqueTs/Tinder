@@ -46,11 +46,7 @@ class C extends React.PureComponent<FormikProps<RegisterInput> & Props> {
             </a>
           </FormItem>
           <FormItem>
-            <Button
-              type="primary"
-              htmlType="submit"
-              className="login-form-button"
-            >
+            <Button htmlType="submit" className="login-form-button">
               Register
             </Button>
           </FormItem>

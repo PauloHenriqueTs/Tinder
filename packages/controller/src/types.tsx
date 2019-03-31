@@ -32,8 +32,31 @@ export type LoginResponse = {
   user?: Maybe<User>;
 };
 
+export type Matches = {
+  id: Scalars["ID"];
+  name: Scalars["String"];
+  pictureUrl?: Maybe<Scalars["String"]>;
+  description: Scalars["String"];
+  latitude: Scalars["Float"];
+  longitude: Scalars["Float"];
+  user: User;
+};
+
+export type Message = {
+  text: Scalars["String"];
+  user: User;
+  matchesId: Scalars["String"];
+};
+
+export type MessageInput = {
+  text: Scalars["String"];
+  matcheId: Scalars["String"];
+};
+
 export type Mutation = {
   createMatche: Scalars["Boolean"];
+  updateMatche: Scalars["Boolean"];
+  createMessage: Scalars["Boolean"];
   login: LoginResponse;
   logout: Scalars["Boolean"];
   register: RegisterResponse;
@@ -41,6 +64,15 @@ export type Mutation = {
 
 export type MutationCreateMatcheArgs = {
   input: CreateMatcheInput;
+};
+
+export type MutationUpdateMatcheArgs = {
+  MatcheId: Scalars["String"];
+  input: UpdateMatcheInput;
+};
+
+export type MutationCreateMessageArgs = {
+  message: MessageInput;
 };
 
 export type MutationLoginArgs = {
@@ -52,7 +84,18 @@ export type MutationRegisterArgs = {
 };
 
 export type Query = {
+  findMatches: Array<Matches>;
+  viewMatche?: Maybe<Matches>;
+  messages: Array<Message>;
   me?: Maybe<User>;
+};
+
+export type QueryViewMatcheArgs = {
+  id: Scalars["String"];
+};
+
+export type QueryMessagesArgs = {
+  matchesId: Scalars["String"];
 };
 
 export type RegisterInput = {
@@ -62,6 +105,18 @@ export type RegisterInput = {
 
 export type RegisterResponse = {
   errors?: Maybe<Array<Error>>;
+};
+
+export type Subscription = {
+  newMessage: Message;
+};
+
+export type UpdateMatcheInput = {
+  name: Scalars["String"];
+  picture?: Maybe<Scalars["Upload"]>;
+  description: Scalars["String"];
+  latitude: Scalars["Float"];
+  longitude: Scalars["Float"];
 };
 
 export type User = {
@@ -80,6 +135,30 @@ export type CreateMatcheMutation = { __typename?: "Mutation" } & Pick<
   Mutation,
   "createMatche"
 >;
+
+export type FindMatchesQueryVariables = {};
+
+export type FindMatchesQuery = { __typename?: "Query" } & {
+  findMatches: Array<
+    { __typename?: "Matches" } & Pick<
+      Matches,
+      "id" | "name" | "pictureUrl" | "description" | "latitude" | "longitude"
+    > & { user: { __typename?: "User" } & Pick<User, "id" | "email"> }
+  >;
+};
+
+export type ViewMatcheQueryVariables = {
+  id: Scalars["String"];
+};
+
+export type ViewMatcheQuery = { __typename?: "Query" } & {
+  viewMatche: Maybe<
+    { __typename?: "Matches" } & Pick<
+      Matches,
+      "id" | "name" | "pictureUrl" | "description" | "latitude" | "longitude"
+    > & { user: { __typename?: "User" } & Pick<User, "id" | "email"> }
+  >;
+};
 
 export type LoginMutationMutationVariables = {
   email: Scalars["String"];
@@ -186,6 +265,106 @@ export function withCreateMatche<TProps, TChildProps = {}>(
     CreateMatcheMutationVariables,
     CreateMatcheProps<TChildProps>
   >(CreateMatcheDocument, operationOptions);
+}
+export const FindMatchesDocument = gql`
+  query FindMatches {
+    findMatches {
+      id
+      name
+      pictureUrl
+      description
+      latitude
+      longitude
+      user {
+        id
+        email
+      }
+    }
+  }
+`;
+
+export class FindMatchesComponent extends React.Component<
+  Partial<ReactApollo.QueryProps<FindMatchesQuery, FindMatchesQueryVariables>>
+> {
+  render() {
+    return (
+      <ReactApollo.Query<FindMatchesQuery, FindMatchesQueryVariables>
+        query={FindMatchesDocument}
+        {...(this as any)["props"] as any}
+      />
+    );
+  }
+}
+export type FindMatchesProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<FindMatchesQuery, FindMatchesQueryVariables>
+> &
+  TChildProps;
+export function withFindMatches<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        FindMatchesQuery,
+        FindMatchesQueryVariables,
+        FindMatchesProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    FindMatchesQuery,
+    FindMatchesQueryVariables,
+    FindMatchesProps<TChildProps>
+  >(FindMatchesDocument, operationOptions);
+}
+export const ViewMatcheDocument = gql`
+  query ViewMatche($id: String!) {
+    viewMatche(id: $id) {
+      id
+      name
+      pictureUrl
+      description
+      latitude
+      longitude
+      user {
+        id
+        email
+      }
+    }
+  }
+`;
+
+export class ViewMatcheComponent extends React.Component<
+  Partial<ReactApollo.QueryProps<ViewMatcheQuery, ViewMatcheQueryVariables>>
+> {
+  render() {
+    return (
+      <ReactApollo.Query<ViewMatcheQuery, ViewMatcheQueryVariables>
+        query={ViewMatcheDocument}
+        {...(this as any)["props"] as any}
+      />
+    );
+  }
+}
+export type ViewMatcheProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<ViewMatcheQuery, ViewMatcheQueryVariables>
+> &
+  TChildProps;
+export function withViewMatche<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        ViewMatcheQuery,
+        ViewMatcheQueryVariables,
+        ViewMatcheProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    ViewMatcheQuery,
+    ViewMatcheQueryVariables,
+    ViewMatcheProps<TChildProps>
+  >(ViewMatcheDocument, operationOptions);
 }
 export const LoginMutationDocument = gql`
   mutation LoginMutation($email: String!, $password: String!) {
