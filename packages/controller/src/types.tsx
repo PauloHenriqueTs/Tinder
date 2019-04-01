@@ -45,7 +45,7 @@ export type Matches = {
 export type Message = {
   text: Scalars["String"];
   user: User;
-  matchesId: Scalars["String"];
+  matcheId: Scalars["String"];
 };
 
 export type MessageInput = {
@@ -95,7 +95,7 @@ export type QueryViewMatcheArgs = {
 };
 
 export type QueryMessagesArgs = {
-  matchesId: Scalars["String"];
+  matcheId: Scalars["String"];
 };
 
 export type RegisterInput = {
@@ -109,6 +109,10 @@ export type RegisterResponse = {
 
 export type Subscription = {
   newMessage: Message;
+};
+
+export type SubscriptionNewMessageArgs = {
+  matcheId: Scalars["String"];
 };
 
 export type UpdateMatcheInput = {
@@ -136,6 +140,25 @@ export type CreateMatcheMutation = { __typename?: "Mutation" } & Pick<
   "createMatche"
 >;
 
+export type CreateMessageMutationVariables = {
+  message: MessageInput;
+};
+
+export type CreateMessageMutation = { __typename?: "Mutation" } & Pick<
+  Mutation,
+  "createMessage"
+>;
+
+export type UpdateMatcheMutationVariables = {
+  matcheId: Scalars["String"];
+  input: UpdateMatcheInput;
+};
+
+export type UpdateMatcheMutation = { __typename?: "Mutation" } & Pick<
+  Mutation,
+  "updateMatche"
+>;
+
 export type FindMatchesQueryVariables = {};
 
 export type FindMatchesQuery = { __typename?: "Query" } & {
@@ -144,6 +167,18 @@ export type FindMatchesQuery = { __typename?: "Query" } & {
       Matches,
       "id" | "name" | "pictureUrl" | "description" | "latitude" | "longitude"
     > & { user: { __typename?: "User" } & Pick<User, "id" | "email"> }
+  >;
+};
+
+export type ViewMessagesQueryVariables = {
+  matcheId: Scalars["String"];
+};
+
+export type ViewMessagesQuery = { __typename?: "Query" } & {
+  messages: Array<
+    { __typename?: "Message" } & Pick<Message, "text" | "matcheId"> & {
+        user: { __typename?: "User" } & Pick<User, "id" | "email">;
+      }
   >;
 };
 
@@ -158,6 +193,19 @@ export type ViewMatcheQuery = { __typename?: "Query" } & {
       "id" | "name" | "pictureUrl" | "description" | "latitude" | "longitude"
     > & { user: { __typename?: "User" } & Pick<User, "id" | "email"> }
   >;
+};
+
+export type NewMessageSubscriptionSubscriptionVariables = {
+  matcheId: Scalars["String"];
+};
+
+export type NewMessageSubscriptionSubscription = {
+  __typename?: "Subscription";
+} & {
+  newMessage: { __typename?: "Message" } & Pick<
+    Message,
+    "text" | "matcheId"
+  > & { user: { __typename?: "User" } & Pick<User, "id" | "email"> };
 };
 
 export type LoginMutationMutationVariables = {
@@ -266,6 +314,105 @@ export function withCreateMatche<TProps, TChildProps = {}>(
     CreateMatcheProps<TChildProps>
   >(CreateMatcheDocument, operationOptions);
 }
+export const CreateMessageDocument = gql`
+  mutation CreateMessage($message: MessageInput!) {
+    createMessage(message: $message)
+  }
+`;
+
+export class CreateMessageComponent extends React.Component<
+  Partial<
+    ReactApollo.MutationProps<
+      CreateMessageMutation,
+      CreateMessageMutationVariables
+    >
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<
+        CreateMessageMutation,
+        CreateMessageMutationVariables
+      >
+        mutation={CreateMessageDocument}
+        {...(this as any)["props"] as any}
+      />
+    );
+  }
+}
+export type CreateMessageProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<CreateMessageMutation, CreateMessageMutationVariables>
+> &
+  TChildProps;
+export type CreateMessageMutationFn = ReactApollo.MutationFn<
+  CreateMessageMutation,
+  CreateMessageMutationVariables
+>;
+export function withCreateMessage<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        CreateMessageMutation,
+        CreateMessageMutationVariables,
+        CreateMessageProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    CreateMessageMutation,
+    CreateMessageMutationVariables,
+    CreateMessageProps<TChildProps>
+  >(CreateMessageDocument, operationOptions);
+}
+export const UpdateMatcheDocument = gql`
+  mutation UpdateMatche($matcheId: String!, $input: UpdateMatcheInput!) {
+    updateMatche(MatcheId: $matcheId, input: $input)
+  }
+`;
+
+export class UpdateMatcheComponent extends React.Component<
+  Partial<
+    ReactApollo.MutationProps<
+      UpdateMatcheMutation,
+      UpdateMatcheMutationVariables
+    >
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<UpdateMatcheMutation, UpdateMatcheMutationVariables>
+        mutation={UpdateMatcheDocument}
+        {...(this as any)["props"] as any}
+      />
+    );
+  }
+}
+export type UpdateMatcheProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<UpdateMatcheMutation, UpdateMatcheMutationVariables>
+> &
+  TChildProps;
+export type UpdateMatcheMutationFn = ReactApollo.MutationFn<
+  UpdateMatcheMutation,
+  UpdateMatcheMutationVariables
+>;
+export function withUpdateMatche<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        UpdateMatcheMutation,
+        UpdateMatcheMutationVariables,
+        UpdateMatcheProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    UpdateMatcheMutation,
+    UpdateMatcheMutationVariables,
+    UpdateMatcheProps<TChildProps>
+  >(UpdateMatcheDocument, operationOptions);
+}
 export const FindMatchesDocument = gql`
   query FindMatches {
     findMatches {
@@ -316,6 +463,52 @@ export function withFindMatches<TProps, TChildProps = {}>(
     FindMatchesProps<TChildProps>
   >(FindMatchesDocument, operationOptions);
 }
+export const ViewMessagesDocument = gql`
+  query ViewMessages($matcheId: String!) {
+    messages(matcheId: $matcheId) {
+      text
+      user {
+        id
+        email
+      }
+      matcheId
+    }
+  }
+`;
+
+export class ViewMessagesComponent extends React.Component<
+  Partial<ReactApollo.QueryProps<ViewMessagesQuery, ViewMessagesQueryVariables>>
+> {
+  render() {
+    return (
+      <ReactApollo.Query<ViewMessagesQuery, ViewMessagesQueryVariables>
+        query={ViewMessagesDocument}
+        {...(this as any)["props"] as any}
+      />
+    );
+  }
+}
+export type ViewMessagesProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<ViewMessagesQuery, ViewMessagesQueryVariables>
+> &
+  TChildProps;
+export function withViewMessages<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        ViewMessagesQuery,
+        ViewMessagesQueryVariables,
+        ViewMessagesProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    ViewMessagesQuery,
+    ViewMessagesQueryVariables,
+    ViewMessagesProps<TChildProps>
+  >(ViewMessagesDocument, operationOptions);
+}
 export const ViewMatcheDocument = gql`
   query ViewMatche($id: String!) {
     viewMatche(id: $id) {
@@ -365,6 +558,63 @@ export function withViewMatche<TProps, TChildProps = {}>(
     ViewMatcheQueryVariables,
     ViewMatcheProps<TChildProps>
   >(ViewMatcheDocument, operationOptions);
+}
+export const NewMessageSubscriptionDocument = gql`
+  subscription NewMessageSubscription($matcheId: String!) {
+    newMessage(matcheId: $matcheId) {
+      text
+      user {
+        id
+        email
+      }
+      matcheId
+    }
+  }
+`;
+
+export class NewMessageSubscriptionComponent extends React.Component<
+  Partial<
+    ReactApollo.SubscriptionProps<
+      NewMessageSubscriptionSubscription,
+      NewMessageSubscriptionSubscriptionVariables
+    >
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Subscription<
+        NewMessageSubscriptionSubscription,
+        NewMessageSubscriptionSubscriptionVariables
+      >
+        subscription={NewMessageSubscriptionDocument}
+        {...(this as any)["props"] as any}
+      />
+    );
+  }
+}
+export type NewMessageSubscriptionProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<
+    NewMessageSubscriptionSubscription,
+    NewMessageSubscriptionSubscriptionVariables
+  >
+> &
+  TChildProps;
+export function withNewMessageSubscription<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        NewMessageSubscriptionSubscription,
+        NewMessageSubscriptionSubscriptionVariables,
+        NewMessageSubscriptionProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withSubscription<
+    TProps,
+    NewMessageSubscriptionSubscription,
+    NewMessageSubscriptionSubscriptionVariables,
+    NewMessageSubscriptionProps<TChildProps>
+  >(NewMessageSubscriptionDocument, operationOptions);
 }
 export const LoginMutationDocument = gql`
   mutation LoginMutation($email: String!, $password: String!) {

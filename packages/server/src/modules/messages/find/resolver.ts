@@ -6,10 +6,10 @@ export const resolvers: ResolverMap = {
     user: ({ userId }, _, { userLoader }) => userLoader.load(userId)
   },
   Query: {
-    messages: async (_, { matchesId }, { session }) => {
+    messages: async (_, { matcheId }, { session }) => {
       return Message.find({
         where: {
-          matchesId,
+          matcheId,
           userId: session.userId
         }
       });

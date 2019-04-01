@@ -79,7 +79,7 @@ const startServer = async () => {
 
   apollo.applyMiddleware({
     app,
-    cors: false
+    cors: true
   });
 
   let server: any;

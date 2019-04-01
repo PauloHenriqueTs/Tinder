@@ -1,9 +1,9 @@
 type Message {
   text: String!
   user: User!
-  matchesId: String!
+  matcheId: String!
 }
 
 type Query {
-  messages(matchesId: String!): [Message!]!
+  messages(matcheId: String!): [Message!]!
 }

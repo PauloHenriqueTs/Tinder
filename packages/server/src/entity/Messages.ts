@@ -19,7 +19,7 @@ export class Message extends BaseEntity {
   @ManyToOne(() => User)
   user: User;
 
-  @Column("uuid") matchesId: string;
+  @Column("uuid") matcheId: string;
 
   @ManyToOne(() => Matches)
   Matches: Matches;

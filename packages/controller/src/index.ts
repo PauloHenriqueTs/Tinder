@@ -5,4 +5,7 @@ export * from "./modules/Auth/AuthRoute";
 export * from "./modules/LogoutController";
 export * from "./modules/CreateMatche";
 export * from "./modules/FindMatche";
-export * from "./modules/ViewMatche/index";
+export * from "./modules/ViewMatche/";
+export * from "./modules/CreateMessage";
+export * from "./modules/ViewMessages";
+export * from "./modules/UpdateMatche";
