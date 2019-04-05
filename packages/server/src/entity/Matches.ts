@@ -25,6 +25,12 @@ export class Matches extends BaseEntity {
 
   @Column("uuid") userId: string;
 
+  @Column("simple-array") likes: string[];
+
+  @Column("simple-array") deslikes: string[];
+
+  @Column("simple-array") itsMatch: string[];
+
   @OneToOne(() => User, user => user.matches)
   user: User;
 }

@@ -22,8 +22,15 @@ interface Props {
 class C extends React.PureComponent<FormikProps<FormValues> & Props> {
   render() {
     return (
-      <Form style={{ display: "flex" }}>
-        <div style={{ width: 400, margin: "auto" }}>
+      <Form
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "row"
+        }}
+      >
+        <div style={{ width: 400, margin: "0.1em" }}>
+          {console.log(this.props.values)}
           <Field
             name="email"
             prefix={
@@ -41,15 +48,28 @@ class C extends React.PureComponent<FormikProps<FormValues> & Props> {
             placeholder="Password"
             component={InputField}
           />
-          <FormItem>
-            <Link to="/forgot-password">Forgot password</Link>
-          </FormItem>
-          <FormItem>
-            <Button htmlType="submit" className="login-form-button">
+          <FormItem
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              flexDirection: "row"
+            }}
+          >
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="login-form-button"
+            >
               login
             </Button>
           </FormItem>
-          <FormItem>
+          <FormItem
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              flexDirection: "row"
+            }}
+          >
             Or <Link to="/register">register</Link>
           </FormItem>
         </div>

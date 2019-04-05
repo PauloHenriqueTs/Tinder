@@ -6,6 +6,9 @@ type Matches {
   latitude: Float!
   longitude: Float!
   user: User!
+  likes: [String!]
+  deslikes: [String!]
+  itsMatch: [String!]
 }
 
 type Query {

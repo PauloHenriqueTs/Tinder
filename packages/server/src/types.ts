@@ -1,11 +1,45 @@
 export type Maybe<T> = T | null;
 
-export interface Upload {
-  filename: string;
+export interface CreateMatcheInput {
+  name: string;
 
-  mimetype: string;
+  picture?: Maybe<Upload>;
 
-  encoding: string;
+  description: string;
+
+  latitude: number;
+
+  longitude: number;
+
+  likes: string[];
+
+  deslikes: string[];
+
+  itsMatch: string[];
+}
+
+export interface UpdateMatcheInput {
+  name: string;
+
+  picture?: Maybe<Upload>;
+
+  description: string;
+
+  latitude: number;
+
+  longitude: number;
+
+  likes: string[];
+
+  deslikes: string[];
+
+  itsMatch: string[];
+}
+
+export interface MessageInput {
+  text: string;
+
+  matcheId: string;
 }
 
 export interface LoginInput {
@@ -19,7 +53,13 @@ export interface RegisterInput {
 
   password: string;
 }
-import { GraphQLResolveInfo } from "graphql";
+
+export type Upload = any;
+import {
+  GraphQLResolveInfo,
+  GraphQLScalarType,
+  GraphQLScalarTypeConfig
+} from "graphql";
 
 import { MyContext } from "./context";
 
@@ -74,12 +114,130 @@ export type DirectiveResolverFn<TResult, TArgs = {}, TContext = {}> = (
 
 export namespace QueryResolvers {
   export interface Resolvers<TContext = MyContext, TypeParent = {}> {
+    findMatches?: FindMatchesResolver<Matches[], TypeParent, TContext>;
+
+    findme?: FindmeResolver<Maybe<Matches>, TypeParent, TContext>;
+
+    findtalk?: FindtalkResolver<Maybe<FindTalkOutput>, TypeParent, TContext>;
+
+    viewMatche?: ViewMatcheResolver<Maybe<Matches>, TypeParent, TContext>;
+
+    messages?: MessagesResolver<Message[], TypeParent, TContext>;
+
     me?: MeResolver<Maybe<User>, TypeParent, TContext>;
+  }
+
+  export type FindMatchesResolver<
+    R = Matches[],
+    Parent = {},
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext>;
+  export type FindmeResolver<
+    R = Maybe<Matches>,
+    Parent = {},
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext>;
+  export type FindtalkResolver<
+    R = Maybe<FindTalkOutput>,
+    Parent = {},
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext>;
+  export type ViewMatcheResolver<
+    R = Maybe<Matches>,
+    Parent = {},
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext, ViewMatcheArgs>;
+  export interface ViewMatcheArgs {
+    id: string;
+  }
+
+  export type MessagesResolver<
+    R = Message[],
+    Parent = {},
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext, MessagesArgs>;
+  export interface MessagesArgs {
+    matcheId: string;
   }
 
   export type MeResolver<
     R = Maybe<User>,
     Parent = {},
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace MatchesResolvers {
+  export interface Resolvers<TContext = MyContext, TypeParent = Matches> {
+    id?: IdResolver<string, TypeParent, TContext>;
+
+    name?: NameResolver<string, TypeParent, TContext>;
+
+    pictureUrl?: PictureUrlResolver<Maybe<string>, TypeParent, TContext>;
+
+    description?: DescriptionResolver<string, TypeParent, TContext>;
+
+    latitude?: LatitudeResolver<number, TypeParent, TContext>;
+
+    longitude?: LongitudeResolver<number, TypeParent, TContext>;
+
+    user?: UserResolver<User, TypeParent, TContext>;
+
+    likes?: LikesResolver<Maybe<string[]>, TypeParent, TContext>;
+
+    deslikes?: DeslikesResolver<Maybe<string[]>, TypeParent, TContext>;
+
+    itsMatch?: ItsMatchResolver<Maybe<string[]>, TypeParent, TContext>;
+  }
+
+  export type IdResolver<
+    R = string,
+    Parent = Matches,
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext>;
+  export type NameResolver<
+    R = string,
+    Parent = Matches,
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext>;
+  export type PictureUrlResolver<
+    R = Maybe<string>,
+    Parent = Matches,
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext>;
+  export type DescriptionResolver<
+    R = string,
+    Parent = Matches,
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext>;
+  export type LatitudeResolver<
+    R = number,
+    Parent = Matches,
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext>;
+  export type LongitudeResolver<
+    R = number,
+    Parent = Matches,
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext>;
+  export type UserResolver<
+    R = User,
+    Parent = Matches,
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext>;
+  export type LikesResolver<
+    R = Maybe<string[]>,
+    Parent = Matches,
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext>;
+  export type DeslikesResolver<
+    R = Maybe<string[]>,
+    Parent = Matches,
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext>;
+  export type ItsMatchResolver<
+    R = Maybe<string[]>,
+    Parent = Matches,
     TContext = MyContext
   > = Resolver<R, Parent, TContext>;
 }
@@ -103,9 +261,65 @@ export namespace UserResolvers {
   > = Resolver<R, Parent, TContext>;
 }
 
+export namespace FindTalkOutputResolvers {
+  export interface Resolvers<
+    TContext = MyContext,
+    TypeParent = FindTalkOutput
+  > {
+    talk?: TalkResolver<Maybe<(Maybe<Matches>)[]>, TypeParent, TContext>;
+
+    nottalk?: NottalkResolver<Maybe<(Maybe<Matches>)[]>, TypeParent, TContext>;
+  }
+
+  export type TalkResolver<
+    R = Maybe<(Maybe<Matches>)[]>,
+    Parent = FindTalkOutput,
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext>;
+  export type NottalkResolver<
+    R = Maybe<(Maybe<Matches>)[]>,
+    Parent = FindTalkOutput,
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace MessageResolvers {
+  export interface Resolvers<TContext = MyContext, TypeParent = Message> {
+    text?: TextResolver<string, TypeParent, TContext>;
+
+    user?: UserResolver<User, TypeParent, TContext>;
+
+    matcheId?: MatcheIdResolver<string, TypeParent, TContext>;
+  }
+
+  export type TextResolver<
+    R = string,
+    Parent = Message,
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext>;
+  export type UserResolver<
+    R = User,
+    Parent = Message,
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext>;
+  export type MatcheIdResolver<
+    R = string,
+    Parent = Message,
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext>;
+}
+
 export namespace MutationResolvers {
   export interface Resolvers<TContext = MyContext, TypeParent = {}> {
-    singleUpload?: SingleUploadResolver<Maybe<boolean>, TypeParent, TContext>;
+    createMatche?: CreateMatcheResolver<boolean, TypeParent, TContext>;
+
+    deslike?: DeslikeResolver<boolean, TypeParent, TContext>;
+
+    like?: LikeResolver<boolean, TypeParent, TContext>;
+
+    updateMatche?: UpdateMatcheResolver<boolean, TypeParent, TContext>;
+
+    createMessage?: CreateMessageResolver<boolean, TypeParent, TContext>;
 
     login?: LoginResolver<LoginResponse, TypeParent, TContext>;
 
@@ -114,13 +328,51 @@ export namespace MutationResolvers {
     register?: RegisterResolver<RegisterResponse, TypeParent, TContext>;
   }
 
-  export type SingleUploadResolver<
-    R = Maybe<boolean>,
+  export type CreateMatcheResolver<
+    R = boolean,
     Parent = {},
     TContext = MyContext
-  > = Resolver<R, Parent, TContext, SingleUploadArgs>;
-  export interface SingleUploadArgs {
-    file: Upload;
+  > = Resolver<R, Parent, TContext, CreateMatcheArgs>;
+  export interface CreateMatcheArgs {
+    input: CreateMatcheInput;
+  }
+
+  export type DeslikeResolver<
+    R = boolean,
+    Parent = {},
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext, DeslikeArgs>;
+  export interface DeslikeArgs {
+    matcheId: string;
+  }
+
+  export type LikeResolver<
+    R = boolean,
+    Parent = {},
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext, LikeArgs>;
+  export interface LikeArgs {
+    matcheId: string;
+  }
+
+  export type UpdateMatcheResolver<
+    R = boolean,
+    Parent = {},
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext, UpdateMatcheArgs>;
+  export interface UpdateMatcheArgs {
+    MatcheId: string;
+
+    input: UpdateMatcheInput;
+  }
+
+  export type CreateMessageResolver<
+    R = boolean,
+    Parent = {},
+    TContext = MyContext
+  > = Resolver<R, Parent, TContext, CreateMessageArgs>;
+  export interface CreateMessageArgs {
+    message: MessageInput;
   }
 
   export type LoginResolver<
@@ -200,6 +452,21 @@ export namespace RegisterResponseResolvers {
   > = Resolver<R, Parent, TContext>;
 }
 
+export namespace SubscriptionResolvers {
+  export interface Resolvers<TContext = MyContext, TypeParent = {}> {
+    newMessage?: NewMessageResolver<Message, TypeParent, TContext>;
+  }
+
+  export type NewMessageResolver<
+    R = Message,
+    Parent = {},
+    TContext = MyContext
+  > = SubscriptionResolver<R, Parent, TContext, NewMessageArgs>;
+  export interface NewMessageArgs {
+    matcheId: string;
+  }
+}
+
 /** Directs the executor to skip this field or fragment when the `if` argument is true. */
 export type SkipDirectiveResolver<Result> = DirectiveResolverFn<
   Result,
@@ -233,13 +500,23 @@ export interface DeprecatedDirectiveArgs {
   reason?: string;
 }
 
+export interface UploadScalarConfig
+  extends GraphQLScalarTypeConfig<Upload, any> {
+  name: "Upload";
+}
+
 export type IResolvers<TContext = MyContext> = {
   Query?: QueryResolvers.Resolvers<TContext>;
+  Matches?: MatchesResolvers.Resolvers<TContext>;
   User?: UserResolvers.Resolvers<TContext>;
+  FindTalkOutput?: FindTalkOutputResolvers.Resolvers<TContext>;
+  Message?: MessageResolvers.Resolvers<TContext>;
   Mutation?: MutationResolvers.Resolvers<TContext>;
   LoginResponse?: LoginResponseResolvers.Resolvers<TContext>;
   Error?: ErrorResolvers.Resolvers<TContext>;
   RegisterResponse?: RegisterResponseResolvers.Resolvers<TContext>;
+  Subscription?: SubscriptionResolvers.Resolvers<TContext>;
+  Upload?: GraphQLScalarType;
 } & { [typeName: string]: never };
 
 export type IDirectiveResolvers<Result> = {
@@ -249,11 +526,47 @@ export type IDirectiveResolvers<Result> = {
 } & { [directiveName: string]: never };
 
 // ====================================================
+// Scalars
+// ====================================================
+
+// ====================================================
 // Types
 // ====================================================
 
 export interface Query {
+  findMatches: Matches[];
+
+  findme?: Maybe<Matches>;
+
+  findtalk?: Maybe<FindTalkOutput>;
+
+  viewMatche?: Maybe<Matches>;
+
+  messages: Message[];
+
   me?: Maybe<User>;
+}
+
+export interface Matches {
+  id: string;
+
+  name: string;
+
+  pictureUrl?: Maybe<string>;
+
+  description: string;
+
+  latitude: number;
+
+  longitude: number;
+
+  user: User;
+
+  likes?: Maybe<string[]>;
+
+  deslikes?: Maybe<string[]>;
+
+  itsMatch?: Maybe<string[]>;
 }
 
 export interface User {
@@ -262,8 +575,30 @@ export interface User {
   email: string;
 }
 
+export interface FindTalkOutput {
+  talk?: Maybe<(Maybe<Matches>)[]>;
+
+  nottalk?: Maybe<(Maybe<Matches>)[]>;
+}
+
+export interface Message {
+  text: string;
+
+  user: User;
+
+  matcheId: string;
+}
+
 export interface Mutation {
-  singleUpload?: Maybe<boolean>;
+  createMatche: boolean;
+
+  deslike: boolean;
+
+  like: boolean;
+
+  updateMatche: boolean;
+
+  createMessage: boolean;
 
   login: LoginResponse;
 
@@ -288,16 +623,43 @@ export interface RegisterResponse {
   errors?: Maybe<Error[]>;
 }
 
+export interface Subscription {
+  newMessage: Message;
+}
+
 // ====================================================
 // Arguments
 // ====================================================
 
-export interface SingleUploadMutationArgs {
-  file: Upload;
+export interface ViewMatcheQueryArgs {
+  id: string;
+}
+export interface MessagesQueryArgs {
+  matcheId: string;
+}
+export interface CreateMatcheMutationArgs {
+  input: CreateMatcheInput;
+}
+export interface DeslikeMutationArgs {
+  matcheId: string;
+}
+export interface LikeMutationArgs {
+  matcheId: string;
+}
+export interface UpdateMatcheMutationArgs {
+  MatcheId: string;
+
+  input: UpdateMatcheInput;
+}
+export interface CreateMessageMutationArgs {
+  message: MessageInput;
 }
 export interface LoginMutationArgs {
   input: LoginInput;
 }
 export interface RegisterMutationArgs {
   input: RegisterInput;
+}
+export interface NewMessageSubscriptionArgs {
+  matcheId: string;
 }

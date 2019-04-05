@@ -1,11 +1,10 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
-import { Form as AntForm, Button } from "antd";
+import { Form as AntForm, Button, Card } from "antd";
 import { Form, Formik, FormikActions } from "formik";
 import { ImageFile } from "react-dropzone";
 
 import { Page1 } from "./ui/Page1";
-
+import { RedColor } from "../../TextPage";
 const FormItem = AntForm.Item;
 
 export interface ListingFormValues {
@@ -15,6 +14,8 @@ export interface ListingFormValues {
   description: string;
   latitude: number;
   longitude: number;
+  likes: string[] | null;
+  deslikes: string[] | null;
 }
 
 interface Props {
@@ -34,7 +35,9 @@ export const defaultListingFormValues = {
   name: "",
   description: "",
   latitude: 0,
-  longitude: 0
+  longitude: 0,
+  likes: [],
+  deslikes: []
 };
 
 export class ListingForm extends React.PureComponent<Props, any> {
@@ -49,8 +52,7 @@ export class ListingForm extends React.PureComponent<Props, any> {
         {({ isSubmitting, values }) => (
           <Form style={{ display: "flex" }}>
             {console.log(values)}
-            <Link to="/logout">logout</Link>
-            <div style={{ width: 400, margin: "auto" }}>
+            <Card style={{ width: 400, margin: "auto" }}>
               {pages}
               <FormItem>
                 <div
@@ -59,14 +61,22 @@ export class ListingForm extends React.PureComponent<Props, any> {
                     justifyContent: "flex-end"
                   }}
                 >
-                  <div>
-                    <Button htmlType="submit" disabled={isSubmitting}>
-                      create listing
-                    </Button>
-                  </div>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    disabled={isSubmitting}
+                    style={{
+                      position: "fixed",
+                      left: "44%",
+                      background: RedColor,
+                      borderColor: "#FFFFFF"
+                    }}
+                  >
+                    create listing
+                  </Button>
                 </div>
               </FormItem>
-            </div>
+            </Card>
           </Form>
         )}
       </Formik>

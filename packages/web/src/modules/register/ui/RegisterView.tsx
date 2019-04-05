@@ -4,11 +4,13 @@ import { withFormik, FormikErrors, FormikProps, Field, Form } from "formik";
 import { validUserSchema } from "@tinder/common";
 import { InputField } from "../../shared/InputField";
 import { RegisterInput } from "@tinder/controller/dist/types";
+import { Link } from "react-router-dom";
 
 const { Form: AntForm, Icon, Button } = Antd;
 const FormItem = AntForm.Item;
 
 interface Props {
+  onFinish: () => void;
   submit: (
     values: RegisterInput
   ) => Promise<FormikErrors<RegisterInput> | null>;
@@ -17,14 +19,18 @@ interface Props {
 class C extends React.PureComponent<FormikProps<RegisterInput> & Props> {
   render() {
     return (
-      <Form style={{ display: "flex" }}>
-        <div style={{ width: 400, margin: "auto" }}>
+      <Form
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "row"
+        }}
+      >
+        <div style={{ width: 400, margin: "0.1em" }}>
           <Field
             name="email"
-            // tslint:disable-next-line:jsx-no-multiline-js
             prefix={
               <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} /> as any
-              // tslint:disable-next-line:jsx-curly-spacing
             }
             placeholder="Email"
             component={InputField}
@@ -32,26 +38,36 @@ class C extends React.PureComponent<FormikProps<RegisterInput> & Props> {
           <Field
             name="password"
             type="password"
-            // tslint:disable-next-line:jsx-no-multiline-js
             prefix={
               <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} /> as any
-              // tslint:disable-next-line:jsx-curly-spacing
             }
             placeholder="Password"
             component={InputField}
           />
-          <FormItem>
-            <a className="login-form-forgot" href="">
-              Forgot password
-            </a>
-          </FormItem>
-          <FormItem>
-            <Button htmlType="submit" className="login-form-button">
+
+          <FormItem
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              flexDirection: "row"
+            }}
+          >
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="login-form-button"
+            >
               Register
             </Button>
           </FormItem>
-          <FormItem>
-            Or <a href="">login now!</a>
+          <FormItem
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              flexDirection: "row"
+            }}
+          >
+            Or <Link to="/">login</Link>
           </FormItem>
         </div>
       </Form>

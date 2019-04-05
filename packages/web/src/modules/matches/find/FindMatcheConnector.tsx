@@ -9,7 +9,13 @@ class C extends React.PureComponent<WithFindMatches> {
   render() {
     const { matches, loading } = this.props;
     return (
-      <div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center"
+        }}
+      >
         {loading && <div>...loading</div>}
         {matches.map(l => (
           <Card
@@ -19,7 +25,7 @@ class C extends React.PureComponent<WithFindMatches> {
             cover={l.pictureUrl && <img alt="example" src={l.pictureUrl} />}
           >
             <Link to={`/matches/${l.id}`}>
-              <Meta title={l.name} description={l.user.email} />
+              <Meta title={l.name} description={l.description} />
             </Link>
           </Card>
         ))}

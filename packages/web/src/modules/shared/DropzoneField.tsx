@@ -1,7 +1,6 @@
 import * as React from "react";
 import { FieldProps } from "formik";
 import Dropzone from "react-dropzone";
-import { Button } from "antd";
 
 export const DropzoneField: React.SFC<FieldProps<any>> = ({
   field: { name, value },
@@ -17,29 +16,27 @@ export const DropzoneField: React.SFC<FieldProps<any>> = ({
         onDrop={([file]) => {
           setFieldValue(name, file);
         }}
+        style={{
+          backgroundImage: `url(${pUrl})`,
+          width: "100%",
+          height: "18em",
+          border: "1px solid black",
+          backgroundPosition: "center",
+          backgroundrepeat: "no-repeat",
+          backgroundSize: "cover",
+          borderRadius: "0.9em",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center"
+        }}
         {...props}
       >
-        <p>Drag 'n' drop some files here, or click to select files</p>
+        {!pUrl ? (
+          <p style={{ marginLeft: "1em" }}>
+            Drag 'n' drop some files here, or click to select files
+          </p>
+        ) : null}
       </Dropzone>
-      {pUrl && (
-        <img
-          src={pUrl}
-          style={{
-            maxHeight: 200
-          }}
-        />
-      )}
-      <Button
-        onClick={() =>
-          setValues({
-            ...values,
-            pictureUrl: null,
-            picture: null
-          })
-        }
-      >
-        remove
-      </Button>
     </div>
   );
 };

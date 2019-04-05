@@ -15,6 +15,8 @@ export const createMatche = gql`
         description: $description
         latitude: $latitude
         longitude: $longitude
+        likes: ""
+        deslikes: ""
       }
     )
   }

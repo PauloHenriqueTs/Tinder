@@ -15,6 +15,8 @@ export type CreateMatcheInput = {
   description: Scalars["String"];
   latitude: Scalars["Float"];
   longitude: Scalars["Float"];
+  likes: Array<Scalars["String"]>;
+  deslikes: Array<Scalars["String"]>;
 };
 
 export type Error = {
@@ -40,6 +42,8 @@ export type Matches = {
   latitude: Scalars["Float"];
   longitude: Scalars["Float"];
   user: User;
+  likes?: Maybe<Array<Scalars["String"]>>;
+  deslikes?: Maybe<Array<Scalars["String"]>>;
 };
 
 export type Message = {
@@ -55,6 +59,8 @@ export type MessageInput = {
 
 export type Mutation = {
   createMatche: Scalars["Boolean"];
+  deslike: Scalars["Boolean"];
+  like: Scalars["Boolean"];
   updateMatche: Scalars["Boolean"];
   createMessage: Scalars["Boolean"];
   login: LoginResponse;
@@ -64,6 +70,14 @@ export type Mutation = {
 
 export type MutationCreateMatcheArgs = {
   input: CreateMatcheInput;
+};
+
+export type MutationDeslikeArgs = {
+  userId: Scalars["String"];
+};
+
+export type MutationLikeArgs = {
+  userId: Scalars["String"];
 };
 
 export type MutationUpdateMatcheArgs = {
@@ -85,6 +99,7 @@ export type MutationRegisterArgs = {
 
 export type Query = {
   findMatches: Array<Matches>;
+  findme?: Maybe<Matches>;
   viewMatche?: Maybe<Matches>;
   messages: Array<Message>;
   me?: Maybe<User>;
@@ -121,6 +136,8 @@ export type UpdateMatcheInput = {
   description: Scalars["String"];
   latitude: Scalars["Float"];
   longitude: Scalars["Float"];
+  likes: Array<Scalars["String"]>;
+  deslikes: Array<Scalars["String"]>;
 };
 
 export type User = {
@@ -267,6 +284,8 @@ export const CreateMatcheDocument = gql`
         description: $description
         latitude: $latitude
         longitude: $longitude
+        likes: ""
+        deslikes: ""
       }
     )
   }

@@ -4,6 +4,9 @@ input UpdateMatcheInput {
   description: String!
   latitude: Float!
   longitude: Float!
+  likes: [String!]!
+  deslikes: [String!]!
+  itsMatch: [String!]!
 }
 
 type Mutation {
