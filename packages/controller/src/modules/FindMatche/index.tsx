@@ -1,28 +1,42 @@
-import { graphql } from "react-apollo";
+import * as React from "react";
 
-import { FindMatchesDocument, FindMatchesQuery, Matches } from "../../types";
+import { Query } from "react-apollo";
+import {
+  FindMatchesQuery,
+  FindMatchesQueryVariables,
+  FindMatchesDocument,
+  Matches
+} from "../../types";
 
-export interface WithFindMatches {
-  matches: Matches[];
+export interface WithFindMatche {
+  matches: Matches | null;
   loading: boolean;
 }
 
-export const withFindmatches = graphql<
-  any,
-  FindMatchesQuery,
-  {},
-  WithFindMatches
->(FindMatchesDocument, {
-  props: ({ data }) => {
-    let matches: Matches[] = [];
+interface Props {
+  children: (data: WithFindMatche) => JSX.Element | null;
+}
 
-    if (data && !data.loading && data.findMatches) {
-      matches = data.findMatches;
-    }
+export class FindMatche extends React.PureComponent<Props> {
+  render() {
+    const { children } = this.props;
+    return (
+      <Query<FindMatchesQuery, FindMatchesQueryVariables>
+        query={FindMatchesDocument}
+      >
+        {({ data, loading }) => {
+          let matches: Matches | null = null;
 
-    return {
-      matches,
-      loading: data ? data.loading : false
-    };
+          if (data && data.findMatches) {
+            matches = data.findMatches;
+          }
+
+          return children({
+            matches,
+            loading
+          });
+        }}
+      </Query>
+    );
   }
-});
+}

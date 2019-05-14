@@ -4,7 +4,6 @@ import { Form, Formik, FormikActions } from "formik";
 import { ImageFile } from "react-dropzone";
 
 import { Page1 } from "./ui/Page1";
-import { RedColor } from "../../TextPage";
 const FormItem = AntForm.Item;
 
 export interface ListingFormValues {
@@ -16,6 +15,7 @@ export interface ListingFormValues {
   longitude: number;
   likes: string[] | null;
   deslikes: string[] | null;
+  itsMatch: string[] | null;
 }
 
 interface Props {
@@ -37,7 +37,8 @@ export const defaultListingFormValues = {
   latitude: 0,
   longitude: 0,
   likes: [],
-  deslikes: []
+  deslikes: [],
+  itsMatch: []
 };
 
 export class ListingForm extends React.PureComponent<Props, any> {
@@ -61,19 +62,7 @@ export class ListingForm extends React.PureComponent<Props, any> {
                     justifyContent: "flex-end"
                   }}
                 >
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    disabled={isSubmitting}
-                    style={{
-                      position: "fixed",
-                      left: "44%",
-                      background: RedColor,
-                      borderColor: "#FFFFFF"
-                    }}
-                  >
-                    create listing
-                  </Button>
+                  <Button>create listing</Button>
                 </div>
               </FormItem>
             </Card>

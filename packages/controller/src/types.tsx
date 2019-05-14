@@ -17,11 +17,17 @@ export type CreateMatcheInput = {
   longitude: Scalars["Float"];
   likes: Array<Scalars["String"]>;
   deslikes: Array<Scalars["String"]>;
+  itsMatch: Array<Scalars["String"]>;
 };
 
 export type Error = {
   path: Scalars["String"];
   message: Scalars["String"];
+};
+
+export type FindTalkOutput = {
+  talk?: Maybe<Array<Maybe<Matches>>>;
+  nottalk?: Maybe<Array<Maybe<Matches>>>;
 };
 
 export type LoginInput = {
@@ -44,6 +50,7 @@ export type Matches = {
   user: User;
   likes?: Maybe<Array<Scalars["String"]>>;
   deslikes?: Maybe<Array<Scalars["String"]>>;
+  itsMatch?: Maybe<Array<Scalars["String"]>>;
 };
 
 export type Message = {
@@ -73,11 +80,11 @@ export type MutationCreateMatcheArgs = {
 };
 
 export type MutationDeslikeArgs = {
-  userId: Scalars["String"];
+  matcheId: Scalars["String"];
 };
 
 export type MutationLikeArgs = {
-  userId: Scalars["String"];
+  matcheId: Scalars["String"];
 };
 
 export type MutationUpdateMatcheArgs = {
@@ -98,8 +105,9 @@ export type MutationRegisterArgs = {
 };
 
 export type Query = {
-  findMatches: Array<Matches>;
+  findMatches?: Maybe<Matches>;
   findme?: Maybe<Matches>;
+  findtalk?: Maybe<Scalars["Boolean"]>;
   viewMatche?: Maybe<Matches>;
   messages: Array<Message>;
   me?: Maybe<User>;
@@ -138,6 +146,7 @@ export type UpdateMatcheInput = {
   longitude: Scalars["Float"];
   likes: Array<Scalars["String"]>;
   deslikes: Array<Scalars["String"]>;
+  itsMatch: Array<Scalars["String"]>;
 };
 
 export type User = {
@@ -166,6 +175,15 @@ export type CreateMessageMutation = { __typename?: "Mutation" } & Pick<
   "createMessage"
 >;
 
+export type DesLikeMutationVariables = {
+  matcheId: Scalars["String"];
+};
+
+export type DesLikeMutation = { __typename?: "Mutation" } & Pick<
+  Mutation,
+  "deslike"
+>;
+
 export type UpdateMatcheMutationVariables = {
   matcheId: Scalars["String"];
   input: UpdateMatcheInput;
@@ -176,10 +194,16 @@ export type UpdateMatcheMutation = { __typename?: "Mutation" } & Pick<
   "updateMatche"
 >;
 
+export type LikeMutationVariables = {
+  matcheId: Scalars["String"];
+};
+
+export type LikeMutation = { __typename?: "Mutation" } & Pick<Mutation, "like">;
+
 export type FindMatchesQueryVariables = {};
 
 export type FindMatchesQuery = { __typename?: "Query" } & {
-  findMatches: Array<
+  findMatches: Maybe<
     { __typename?: "Matches" } & Pick<
       Matches,
       "id" | "name" | "pictureUrl" | "description" | "latitude" | "longitude"
@@ -286,6 +310,7 @@ export const CreateMatcheDocument = gql`
         longitude: $longitude
         likes: ""
         deslikes: ""
+        itsMatch: ""
       }
     )
   }
@@ -384,6 +409,49 @@ export function withCreateMessage<TProps, TChildProps = {}>(
     CreateMessageProps<TChildProps>
   >(CreateMessageDocument, operationOptions);
 }
+export const DesLikeDocument = gql`
+  mutation DesLike($matcheId: String!) {
+    deslike(matcheId: $matcheId)
+  }
+`;
+
+export class DesLikeComponent extends React.Component<
+  Partial<ReactApollo.MutationProps<DesLikeMutation, DesLikeMutationVariables>>
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<DesLikeMutation, DesLikeMutationVariables>
+        mutation={DesLikeDocument}
+        {...(this as any)["props"] as any}
+      />
+    );
+  }
+}
+export type DesLikeProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<DesLikeMutation, DesLikeMutationVariables>
+> &
+  TChildProps;
+export type DesLikeMutationFn = ReactApollo.MutationFn<
+  DesLikeMutation,
+  DesLikeMutationVariables
+>;
+export function withDesLike<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        DesLikeMutation,
+        DesLikeMutationVariables,
+        DesLikeProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    DesLikeMutation,
+    DesLikeMutationVariables,
+    DesLikeProps<TChildProps>
+  >(DesLikeDocument, operationOptions);
+}
 export const UpdateMatcheDocument = gql`
   mutation UpdateMatche($matcheId: String!, $input: UpdateMatcheInput!) {
     updateMatche(MatcheId: $matcheId, input: $input)
@@ -431,6 +499,49 @@ export function withUpdateMatche<TProps, TChildProps = {}>(
     UpdateMatcheMutationVariables,
     UpdateMatcheProps<TChildProps>
   >(UpdateMatcheDocument, operationOptions);
+}
+export const LikeDocument = gql`
+  mutation Like($matcheId: String!) {
+    like(matcheId: $matcheId)
+  }
+`;
+
+export class LikeComponent extends React.Component<
+  Partial<ReactApollo.MutationProps<LikeMutation, LikeMutationVariables>>
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<LikeMutation, LikeMutationVariables>
+        mutation={LikeDocument}
+        {...(this as any)["props"] as any}
+      />
+    );
+  }
+}
+export type LikeProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<LikeMutation, LikeMutationVariables>
+> &
+  TChildProps;
+export type LikeMutationFn = ReactApollo.MutationFn<
+  LikeMutation,
+  LikeMutationVariables
+>;
+export function withLike<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        LikeMutation,
+        LikeMutationVariables,
+        LikeProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    LikeMutation,
+    LikeMutationVariables,
+    LikeProps<TChildProps>
+  >(LikeDocument, operationOptions);
 }
 export const FindMatchesDocument = gql`
   query FindMatches {

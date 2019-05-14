@@ -72,7 +72,7 @@ export class ViewMatchesConnector extends React.PureComponent<
           )}
         </Mutation>
         <Mutation mutation={like}>
-          {like => (
+          {(like, data) => (
             <Btnlike
               onClick={() => like({ variables: { userId: state.userid } })}
             />

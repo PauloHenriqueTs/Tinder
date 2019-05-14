@@ -52,11 +52,7 @@ class C extends React.PureComponent<FormikProps<RegisterInput> & Props> {
               flexDirection: "row"
             }}
           >
-            <Button
-              type="primary"
-              htmlType="submit"
-              className="login-form-button"
-            >
+            <Button htmlType="submit" className="login-form-button">
               Register
             </Button>
           </FormItem>

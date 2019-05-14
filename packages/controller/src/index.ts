@@ -9,3 +9,5 @@ export * from "./modules/ViewMatche/";
 export * from "./modules/CreateMessage";
 export * from "./modules/ViewMessages";
 export * from "./modules/UpdateMatche";
+export * from "./modules/DeslikeController";
+export * from "./modules/LikeController";
