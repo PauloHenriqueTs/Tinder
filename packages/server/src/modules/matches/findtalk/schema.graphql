@@ -1,8 +1,0 @@
-type FindTalkOutput {
-  talk: [Matches]
-  nottalk: [Matches]
-}
-
-type Query {
-  findtalk: Boolean
-}

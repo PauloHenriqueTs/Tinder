@@ -1,9 +1,0 @@
-type Message {
-  text: String!
-  user: User!
-  matcheId: String!
-}
-
-type Query {
-  messages(matcheId: String!): [Message!]!
-}

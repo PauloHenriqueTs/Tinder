@@ -1,8 +1,0 @@
-input MessageInput {
-  text: String!
-  matcheId: String!
-}
-
-type Mutation {
-  createMessage(message: MessageInput!): Boolean!
-}
