@@ -5,6 +5,7 @@
     "lib": ["dom", "es6", "es2017", "esnext.asynciterable"],
     "sourceMap": true,
     "outDir": "./dist",
+
     "moduleResolution": "node",
     "declaration": false,
 
@@ -22,7 +23,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "skipLibCheck": true,
-    "baseUrl": ".",
+    //  "baseUrl": ".",
     "rootDir": "src"
   },
   "exclude": ["node_modules"],

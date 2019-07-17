@@ -22,7 +22,7 @@ import { logManager } from "./utils/logManager";
 import { setupErrorHandling } from "./utils/shutdown";
 import { MyContext } from "./types/Context";
 import { User } from "./entity/User";
-import { matchesLoader } from "./utils/matchesLoader";
+import { matchesLoader } from "./loaders/matchesLoader";
 import { createServer } from "http";
 
 require("dotenv-safe").config();
@@ -136,7 +136,7 @@ const startServer = async (): Promise<void> => {
           "emails"
         ]
       },
-      async (_, __, userProfile, cb) => {
+      async (accessToken, refreshToken, userProfile, cb) => {
         const profile = userProfile;
         const { email, name, picture } = profile._json;
         if (profile._json) {
@@ -151,7 +151,9 @@ const startServer = async (): Promise<void> => {
             }).save();
           }
           cb(null, {
-            user
+            user,
+            accessToken,
+            refreshToken
           });
         }
       }
@@ -171,6 +173,8 @@ const startServer = async (): Promise<void> => {
     (req, res) => {
       if (req.user.user.id && req.session) {
         req.session.userId = req.user.user.id;
+        req.session.accessToken = req.user.accessToken;
+        req.session.refreshToken = req.user.refreshToken;
       }
       res.redirect("http://localhost:4000/graphql/");
     }

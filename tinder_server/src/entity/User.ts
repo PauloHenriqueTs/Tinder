@@ -8,6 +8,7 @@ import {
 import { ObjectType, Field, ID, Ctx } from "type-graphql";
 import { Matches } from "./Matches";
 import { MyContext } from "../types/Context";
+import { matchesLoaderType } from "../loaders/matchesLoaderType";
 
 @ObjectType()
 @Entity()
@@ -42,8 +43,10 @@ export class User extends BaseEntity {
   @OneToMany(() => Matches, m => m.last_like_user)
   last_like_user_Connection: Promise<Matches[]>;
 
-  @Field(() => [User], { nullable: true })
-  async matches(@Ctx() { matchesLoader }: MyContext): Promise<User[]> {
+  @Field(() => [matchesLoaderType], { nullable: true })
+  async matches(@Ctx() { matchesLoader }: MyContext): Promise<
+    matchesLoaderType[]
+  > {
     return matchesLoader.load(this.id);
   }
 }
