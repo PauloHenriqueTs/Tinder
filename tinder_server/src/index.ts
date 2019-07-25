@@ -139,12 +139,13 @@ const startServer = async (): Promise<void> => {
       async (accessToken, refreshToken, userProfile, cb) => {
         const profile = userProfile;
         const { email, name, picture } = profile._json;
+        console.log(profile._json);
         if (profile._json) {
           let user = await typeorm
             .getRepository(User)
             .findOne({ where: { email } });
           if (!user) {
-            await User.create({
+            user = await User.create({
               email,
               name,
               pictureUrl: picture.data.url

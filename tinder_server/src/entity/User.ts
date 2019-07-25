@@ -37,6 +37,14 @@ export class User extends BaseEntity {
   @Column({ type: "text", nullable: true })
   lastMessage: string;
 
+  @Field(() => [String], { nullable: true })
+  @Column({ type: "simple-array", nullable: true })
+  like: string[] = [];
+
+  @Field(() => [String], { nullable: true })
+  @Column({ type: "simple-array", nullable: true })
+  deslike: string[] = [];
+
   @OneToMany(() => Matches, m => m.first_like_user)
   first_like_user_Connection: Promise<Matches[]>;
 

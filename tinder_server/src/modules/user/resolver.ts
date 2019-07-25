@@ -59,24 +59,88 @@ export class UserResolver {
   async find(): Promise<User[]> {
     return User.find({});
   }
-  @Mutation(() => String, { nullable: true })
+  @Mutation(() => Boolean)
   async like(
-    @Arg("first_like_userid") first_like_userid: string,
-    @Arg("last_like_userid") last_like_userid: string
+    @Arg("userid") userid: string,
+    @Arg("matcheid") matcheid: string
   ): Promise<Boolean> {
+    //const userid1 = ctx.req.session!.userId;
+    const OneofUsersGiveDeslike = await User.find({
+      where: {
+        deslike: In([userid, matcheid])
+      }
+    });
+
+    if (!OneofUsersGiveDeslike[0] === undefined) {
+      return false;
+    } else {
+      let user = await User.findOne({
+        where: {
+          id: userid
+        }
+      });
+      let matche = await User.findOne({
+        where: {
+          id: matcheid
+        }
+      });
+
+      if (matche && user) {
+        console.log(matche.like);
+        if (!matche.like.includes(userid)) {
+          matche!.like.push(userid);
+          await User.save(matche);
+        }
+
+        if (user!.like.includes(matcheid)) {
+          const TheyGiveMatche = await Matches.find({
+            where: {
+              first_like_userid: In([userid, matcheid]),
+              last_like_userid: In([userid, matcheid])
+            }
+          });
+          if (!TheyGiveMatche) {
+            await Matches.create({
+              first_like_userid: userid,
+              last_like_userid: matcheid
+            }).save();
+            return true;
+          } else {
+            return true;
+          }
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    }
+  }
+  @Mutation(() => Boolean)
+  async deslike(
+    @Arg("userid") userid: string,
+    @Arg("matcheid") matcheid: string
+  ): Promise<Boolean> {
+    //const userid1 = ctx.req.session!.userId;
     const TheyGiveMatche = await Matches.find({
       where: {
-        first_like_userid: In([first_like_userid, last_like_userid]),
-        last_like_userid: In([first_like_userid, last_like_userid])
+        first_like_userid: In([userid, matcheid]),
+        last_like_userid: In([userid, matcheid])
       }
     });
     if (!TheyGiveMatche) {
-      await Matches.create({
-        first_like_userid,
-        last_like_userid
-      }).save();
-      return true;
+      return false;
     } else {
+      let matche = await User.findOne({
+        where: {
+          id: matcheid
+        }
+      });
+      if (!matche!.like.includes(userid)) {
+        matche!.like.push(userid);
+        await User.save(matche!);
+        return true;
+      }
       return false;
     }
   }
