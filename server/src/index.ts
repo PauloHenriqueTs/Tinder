@@ -132,14 +132,13 @@ const startServer = async (): Promise<void> => {
           "displayName",
           "name",
           "gender",
-          "picture.type(large)",
+          "picture.width(800).height(600)",
           "emails"
         ]
       },
       async (accessToken, refreshToken, userProfile, cb) => {
         const profile = userProfile;
         const { email, name, picture } = profile._json;
-        console.log(profile._json);
         if (profile._json) {
           let user = await typeorm
             .getRepository(User)
@@ -177,7 +176,7 @@ const startServer = async (): Promise<void> => {
         req.session.accessToken = req.user.accessToken;
         req.session.refreshToken = req.user.refreshToken;
       }
-      res.redirect("http://localhost:4000/graphql/");
+      res.redirect("http://localhost:3000/hello");
     }
   );
 

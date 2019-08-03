@@ -6,6 +6,10 @@ import { In } from "typeorm";
 
 @Resolver(User)
 export class UserResolver {
+  @Query(() => String)
+  async hello() {
+    return "Hello World!";
+  }
   @Mutation(() => Boolean)
   async logout(
     @Ctx()

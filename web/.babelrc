@@ -1,0 +1,4 @@
+{
+  "plugins": ["import-static-files"],
+  "presets": ["next/babel", "@zeit/next-typescript/babel"]
+}
