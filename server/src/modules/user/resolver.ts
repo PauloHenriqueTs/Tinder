@@ -2,8 +2,8 @@ import { Ctx, Mutation, Query, Resolver, Arg } from "type-graphql";
 import { MyContext } from "../../types/Context";
 import { Matches } from "../../entity/Matches";
 import { User } from "../../entity/User";
-import { In } from "typeorm";
-
+import { In, Not } from "typeorm";
+import * as typeorm from "typeorm";
 @Resolver(User)
 export class UserResolver {
   @Query(() => String)
@@ -32,17 +32,21 @@ export class UserResolver {
     const { userId = "" } = ctx.req.session || {};
     return userId ? User.findOne(userId) : null;
   }
-  @Mutation(() => User)
+  @Mutation(() => User, { nullable: true })
   async register(
     @Arg("email") email: string,
     @Arg("name") name: string
-  ): Promise<User> {
-    const user = await User.create({
-      email,
-      name
-    }).save();
-
-    return user;
+  ): Promise<User | null> {
+    let user1 = await typeorm.getRepository(User).findOne({ where: { email } });
+    if (!user1 && user1 === undefined) {
+      const user = await User.create({
+        email,
+        name
+      }).save();
+      return user;
+    } else {
+      return null;
+    }
   }
   @Mutation(() => User, { nullable: true })
   async login(
@@ -59,16 +63,20 @@ export class UserResolver {
     return user;
   }
 
-  @Query(() => [User], { nullable: true })
-  async find(): Promise<User[]> {
-    return User.find({});
+  @Query(() => User, { nullable: true })
+  async findmatcheruser(@Ctx() ctx: MyContext): Promise<User | undefined> {
+    const userid = ctx.req.session!.userId;
+
+    return User.findOne({
+      where: { id: Not(userid), deslike: Not(userid), like: Not(userid) }
+    });
   }
   @Mutation(() => Boolean)
   async like(
-    @Arg("userid") userid: string,
+    @Ctx() ctx: MyContext,
     @Arg("matcheid") matcheid: string
   ): Promise<Boolean> {
-    //const userid1 = ctx.req.session!.userId;
+    const userid = ctx.req.session!.userId;
     const OneofUsersGiveDeslike = await User.find({
       where: {
         deslike: In([userid, matcheid])
@@ -90,7 +98,6 @@ export class UserResolver {
       });
 
       if (matche && user) {
-        console.log(matche.like);
         if (!matche.like.includes(userid)) {
           matche!.like.push(userid);
           await User.save(matche);
@@ -122,10 +129,10 @@ export class UserResolver {
   }
   @Mutation(() => Boolean)
   async deslike(
-    @Arg("userid") userid: string,
-    @Arg("matcheid") matcheid: string
+    @Arg("matcheid") matcheid: string,
+    @Ctx() ctx: MyContext
   ): Promise<Boolean> {
-    //const userid1 = ctx.req.session!.userId;
+    const userid = ctx.req.session!.userId;
     const TheyGiveMatche = await Matches.find({
       where: {
         first_like_userid: In([userid, matcheid]),

@@ -1,24 +1,15 @@
 import * as React from "react";
 
 import styled from "styled-components";
-import { MatcheView } from "../components/adobexd/MatcheView";
+import { MatcheView } from "../components/view/MatcheView";
 
 export default () => (
   <Container>
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        flexDirection: "column"
-      }}
-    >
-      <MatcheView user={User.data.me} />
-    </div>
+    <MatcheView user={User.data.me} size={"33vw"} />
   </Container>
 );
 
 const Container = styled.div`
-  height: 100vh;
   display: flex;
 
   background-color: #f1f9ff;

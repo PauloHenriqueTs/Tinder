@@ -9,6 +9,7 @@
     "generate": "gql-gen --config codegen.yml"
   },
   "dependencies": {
+    "@zeit/next-css": "^1.0.1",
     "@zeit/next-typescript": "^1.1.1",
     "apollo-boost": "^0.1.27",
     "apollo-link-context": "^1.0.12",

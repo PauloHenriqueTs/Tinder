@@ -15,7 +15,7 @@ export const MatchesWithoutMessage: FunctionComponent<Props> = props => {
       <div style={{ display: "flex", justifyContent: "flex-start" }}>
         {props.user.matches.map(m =>
           !m.lastMessage ? (
-            <Content id={m.User!.id}>
+            <Content id={m.User!.id} key={m.User!.id}>
               <Img url={m.User!.pictureUrl ? m.User!.pictureUrl : imageNull}>
                 <ContentText>{m.User!.name}</ContentText>
               </Img>

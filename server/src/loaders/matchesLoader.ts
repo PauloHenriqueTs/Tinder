@@ -26,12 +26,15 @@ const batchMatches = async (meID: string[]) => {
   });
 
   const MatchesMap1: { [key: string]: matchesLoaderType[] } = {};
-  meID.forEach(async id =>
-    MatchesMap[id].forEach(m => {
-      const lastMessage = ReturnLastMessage(m, messages, id);
-      CreateMatchesWithLastMessage(id, MatchesMap1, m, lastMessage);
-    })
-  );
+  meID.forEach(id => {
+    if (MatchesMap[id]) {
+      MatchesMap[id].forEach(m => {
+        console.log(m);
+        const lastMessage = ReturnLastMessage(m, messages, id);
+        CreateMatchesWithLastMessage(id, MatchesMap1, m, lastMessage);
+      });
+    }
+  });
 
   return meID.map(id => MatchesMap1[id]);
 };

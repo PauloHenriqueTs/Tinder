@@ -13,9 +13,9 @@ export default function DeslikeButton() {
             y2="1"
             gradientUnits="objectBoundingBox"
           >
-            <stop offset="0" stop-color="#f75006" />
-            <stop offset="0.744" stop-color="#f50659" />
-            <stop offset="1" stop-color="#f70559" />
+            <stop offset="0" stopColor="#f75006" />
+            <stop offset="0.744" stopColor="#f50659" />
+            <stop offset="1" stopColor="#f70559" />
           </linearGradient>
         </defs>
         <path
@@ -39,6 +39,7 @@ const BtnDeslike = styled.button`
   border-radius: 50%;
   border: 0.01rem solid #f1f9ff;
   background: none;
+  background-color: #fff;
   outline: none;
   padding: 0;
   margin: 0;

@@ -15,12 +15,52 @@ export type DateTime = any;
 // Documents
 // ====================================================
 
+export type DeslikeVariables = {
+  matcheid: string;
+};
+
+export type DeslikeMutation = {
+  __typename?: "Mutation";
+
+  deslike: boolean;
+};
+
+export type LikeVariables = {
+  matcheid: string;
+};
+
+export type LikeMutation = {
+  __typename?: "Mutation";
+
+  like: boolean;
+};
+
 export type LogoutVariables = {};
 
 export type LogoutMutation = {
   __typename?: "Mutation";
 
   logout: boolean;
+};
+
+export type FindmatcheruserVariables = {};
+
+export type FindmatcheruserQuery = {
+  __typename?: "Query";
+
+  findmatcheruser: Maybe<FindmatcheruserFindmatcheruser>;
+};
+
+export type FindmatcheruserFindmatcheruser = {
+  __typename?: "User";
+
+  id: string;
+
+  name: string;
+
+  pictureUrl: Maybe<string>;
+
+  bio: Maybe<string>;
 };
 
 export type HelloVariables = {};
@@ -98,6 +138,90 @@ import gql from "graphql-tag";
 // Components
 // ====================================================
 
+export const DeslikeDocument = gql`
+  mutation Deslike($matcheid: String!) {
+    deslike(matcheid: $matcheid)
+  }
+`;
+export class DeslikeComponent extends React.Component<
+  Partial<ReactApollo.MutationProps<DeslikeMutation, DeslikeVariables>>
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<DeslikeMutation, DeslikeVariables>
+        mutation={DeslikeDocument}
+        {...(this as any)["props"] as any}
+      />
+    );
+  }
+}
+export type DeslikeProps<TChildProps = any> = Partial<
+  ReactApollo.MutateProps<DeslikeMutation, DeslikeVariables>
+> &
+  TChildProps;
+export type DeslikeMutationFn = ReactApollo.MutationFn<
+  DeslikeMutation,
+  DeslikeVariables
+>;
+export function DeslikeHOC<TProps, TChildProps = any>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        DeslikeMutation,
+        DeslikeVariables,
+        DeslikeProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.graphql<
+    TProps,
+    DeslikeMutation,
+    DeslikeVariables,
+    DeslikeProps<TChildProps>
+  >(DeslikeDocument, operationOptions);
+}
+export const LikeDocument = gql`
+  mutation Like($matcheid: String!) {
+    like(matcheid: $matcheid)
+  }
+`;
+export class LikeComponent extends React.Component<
+  Partial<ReactApollo.MutationProps<LikeMutation, LikeVariables>>
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<LikeMutation, LikeVariables>
+        mutation={LikeDocument}
+        {...(this as any)["props"] as any}
+      />
+    );
+  }
+}
+export type LikeProps<TChildProps = any> = Partial<
+  ReactApollo.MutateProps<LikeMutation, LikeVariables>
+> &
+  TChildProps;
+export type LikeMutationFn = ReactApollo.MutationFn<
+  LikeMutation,
+  LikeVariables
+>;
+export function LikeHOC<TProps, TChildProps = any>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        LikeMutation,
+        LikeVariables,
+        LikeProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.graphql<
+    TProps,
+    LikeMutation,
+    LikeVariables,
+    LikeProps<TChildProps>
+  >(LikeDocument, operationOptions);
+}
 export const LogoutDocument = gql`
   mutation Logout {
     logout
@@ -139,6 +263,51 @@ export function LogoutHOC<TProps, TChildProps = any>(
     LogoutVariables,
     LogoutProps<TChildProps>
   >(LogoutDocument, operationOptions);
+}
+export const FindmatcheruserDocument = gql`
+  query Findmatcheruser {
+    findmatcheruser {
+      id
+      name
+      pictureUrl
+      bio
+    }
+  }
+`;
+export class FindmatcheruserComponent extends React.Component<
+  Partial<
+    ReactApollo.QueryProps<FindmatcheruserQuery, FindmatcheruserVariables>
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Query<FindmatcheruserQuery, FindmatcheruserVariables>
+        query={FindmatcheruserDocument}
+        {...(this as any)["props"] as any}
+      />
+    );
+  }
+}
+export type FindmatcheruserProps<TChildProps = any> = Partial<
+  ReactApollo.DataProps<FindmatcheruserQuery, FindmatcheruserVariables>
+> &
+  TChildProps;
+export function FindmatcheruserHOC<TProps, TChildProps = any>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        FindmatcheruserQuery,
+        FindmatcheruserVariables,
+        FindmatcheruserProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.graphql<
+    TProps,
+    FindmatcheruserQuery,
+    FindmatcheruserVariables,
+    FindmatcheruserProps<TChildProps>
+  >(FindmatcheruserDocument, operationOptions);
 }
 export const HelloDocument = gql`
   query Hello {

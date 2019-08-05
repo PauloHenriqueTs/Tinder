@@ -1,5 +1,9 @@
-import * as React from "react";
+import React, { FunctionComponent } from "react";
 import styled from "styled-components";
+
+export const FacebookLogin: FunctionComponent<any> = () => {
+  return <BtnFacebook>&nbsp;&nbsp;Sign In with Facebook</BtnFacebook>;
+};
 
 const BtnFacebook = styled.button`
   width: 10rem;
@@ -17,7 +21,3 @@ const BtnFacebook = styled.button`
     opacity: 0.6;
   }
 `;
-
-export function FacebookLogin() {
-  return <BtnFacebook>&nbsp;&nbsp;Sign In with Facebook</BtnFacebook>;
-}

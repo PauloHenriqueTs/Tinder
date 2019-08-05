@@ -21,7 +21,7 @@ export const MatchesWithMessage: FunctionComponent<Props> = props => {
       >
         {props.user.matches.map(m =>
           m.lastMessage ? (
-            <Content id={m.User!.id}>
+            <Content id={m.User!.id} key={m.User!.id}>
               <Img url={m.User!.pictureUrl ? m.User!.pictureUrl : imageNull} />
               <div
                 style={{

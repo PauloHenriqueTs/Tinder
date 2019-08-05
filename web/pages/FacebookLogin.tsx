@@ -1,8 +1,8 @@
 import React from "react";
 import Layout from "../components/Layout";
-import { FacebookLogin } from "../components/FacebookLogin";
+import { FacebookLogin } from "../components/view/FacebookLogin";
 
-export default () => {
+const Facebook = () => {
   return (
     <Layout title="FacebookLogin page">
       <a href="http://localhost:4000/auth/facebook">
@@ -11,3 +11,5 @@ export default () => {
     </Layout>
   );
 };
+
+export default Facebook;
