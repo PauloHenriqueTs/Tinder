@@ -8,8 +8,5 @@ export class MessageInput implements Partial<Message> {
   text: string;
 
   @Field(() => String)
-  userId: string;
-
-  @Field(() => String)
   matcheId: string;
 }

@@ -1,4 +1,14 @@
-import { Ctx, Mutation, Query, Resolver, Arg } from "type-graphql";
+import {
+  Ctx,
+  Mutation,
+  Query,
+  Resolver,
+  Arg,
+  Subscription,
+  Publisher,
+  PubSub,
+  Root
+} from "type-graphql";
 import { MyContext } from "../../types/Context";
 import { Matches } from "../../entity/Matches";
 import { User } from "../../entity/User";
@@ -63,18 +73,12 @@ export class UserResolver {
     return user;
   }
 
-  @Query(() => User, { nullable: true })
-  async findmatcheruser(@Ctx() ctx: MyContext): Promise<User | undefined> {
-    const userid = ctx.req.session!.userId;
-
-    return User.findOne({
-      where: { id: Not(userid), deslike: Not(userid), like: Not(userid) }
-    });
-  }
   @Mutation(() => Boolean)
   async like(
     @Ctx() ctx: MyContext,
-    @Arg("matcheid") matcheid: string
+    @Arg("matcheid") matcheid: string,
+    @PubSub("User")
+    notifyAboutlike: Publisher<likePayloader>
   ): Promise<Boolean> {
     const userid = ctx.req.session!.userId;
     const OneofUsersGiveDeslike = await User.find({
@@ -103,14 +107,26 @@ export class UserResolver {
           await User.save(matche);
         }
 
+        const likenotifyuser = await User.findOne({
+          where: { id: Not(userid), deslike: Not(userid), like: Not(userid) }
+        });
+
+        await notifyAboutlike({
+          user: likenotifyuser
+        });
+
         if (user!.like.includes(matcheid)) {
           const TheyGiveMatche = await Matches.find({
+            join: {
+              alias: "matches"
+            },
             where: {
               first_like_userid: In([userid, matcheid]),
               last_like_userid: In([userid, matcheid])
             }
           });
-          if (!TheyGiveMatche) {
+          console.log(TheyGiveMatche);
+          if (!TheyGiveMatche[0]) {
             await Matches.create({
               first_like_userid: userid,
               last_like_userid: matcheid
@@ -155,4 +171,24 @@ export class UserResolver {
       return false;
     }
   }
+  @Query(() => User, { nullable: true })
+  async findmatcheruser(@Ctx() ctx: MyContext): Promise<User | undefined> {
+    const userid = ctx.req.session!.userId;
+
+    return User.findOne({
+      where: { id: Not(userid), deslike: Not(userid), like: Not(userid) }
+    });
+  }
+
+  @Subscription(() => User, {
+    topics: "User",
+    nullable: true
+  })
+  async finduser(@Root() newMessage: likePayloader): Promise<User | undefined> {
+    return newMessage.user;
+  }
+}
+
+interface likePayloader {
+  user: User | undefined;
 }

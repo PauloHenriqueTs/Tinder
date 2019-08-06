@@ -25,13 +25,15 @@ import { MyContext } from "../../types/Context";
 export class MessageResolver {
   @Mutation(() => Boolean)
   async addNewMessage(
+    @Ctx() ctx: MyContext,
     @Arg("message") input: MessageInput,
     @PubSub(PUBSUB_NEW_MESSAGE)
     notifyAboutNewMessage: Publisher<NewMessagePayload>
   ): Promise<boolean> {
+    const userid = ctx.req.session!.userId;
     const message: Message = await Message.create({
       text: input.text,
-      userId: input.userId,
+      userId: userid,
       matcheId: input.matcheId,
       date: new Date()
     }).save();

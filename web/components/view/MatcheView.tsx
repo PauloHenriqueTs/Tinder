@@ -3,14 +3,15 @@ import { interpolate, animated, useSpring } from "react-spring";
 import { useDrag } from "react-use-gesture";
 import styled from "styled-components";
 import {
-  FindmatcheruserFindmatcheruser,
   LikeMutation,
-  LikeVariables
+  LikeVariables,
+  FindUserFinduser,
+  Maybe
 } from "../../generated/apolloComponents";
 import { MutationFn } from "react-apollo";
 
 interface Props {
-  user: FindmatcheruserFindmatcheruser;
+  user: Maybe<FindUserFinduser>;
   size: string;
   likeFunction: MutationFn<LikeMutation, LikeVariables>;
 }
@@ -44,16 +45,11 @@ export const MatcheView: FunctionComponent<Props> = props => {
   const handle = async (x: number) => {
     if (x > windowWidthBound) {
       const result = await props.likeFunction({
-        variables: { matcheid: props.user.id }
+        variables: { matcheid: props.user!.id }
       });
 
-      if (result) {
-        if (!result.data!.like) {
-          console.log(result.data!.like);
-          window.location.href = window.location.href;
-        } else {
-          console.log("ok");
-        }
+      if (result && result.data) {
+        window.location.href = window.location.href;
       }
     }
   };
@@ -63,13 +59,13 @@ export const MatcheView: FunctionComponent<Props> = props => {
       style={{
         transform: interpolate([x, y], translate as any),
         backgroundImage: `url(${
-          props.user.pictureUrl ? props.user.pictureUrl : imageNull
+          props.user!.pictureUrl ? props.user!.pictureUrl : imageNull
         })`
       }}
       size={props.size}
     >
       <animated.div {...bind()} className={"title1"}>
-        {props.user.name}
+        {props.user!.name}
       </animated.div>
     </Container>
   );

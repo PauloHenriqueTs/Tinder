@@ -26,11 +26,11 @@ const batchMatches = async (meID: string[]) => {
   });
 
   const MatchesMap1: { [key: string]: matchesLoaderType[] } = {};
-  meID.forEach(id => {
+  meID.forEach(async id => {
     if (MatchesMap[id]) {
       MatchesMap[id].forEach(m => {
-        console.log(m);
         const lastMessage = ReturnLastMessage(m, messages, id);
+
         CreateMatchesWithLastMessage(id, MatchesMap1, m, lastMessage);
       });
     }
@@ -46,7 +46,7 @@ function FindMatchesofThatUser(
   MatchesMap: { [key: string]: User[] },
   m: Matches
 ): Boolean {
-  if (MatchesMap[id] === undefined) {
+  if (!MatchesMap[id]) {
     if (m.first_like_userid === id) {
       MatchesMap[id] = [(m as any).__last_like_user__];
     }
@@ -61,10 +61,15 @@ function FindMatchesofThatUser(
       MatchesMap[id].push((m as any).__first_like_user__);
     }
   }
+
   return true;
 }
 
-function ReturnLastMessage(m: User, message: Message[], id: string): Message {
+function ReturnLastMessage(
+  m: User,
+  message: Message[],
+  id: string
+): Message | null {
   const matchesMessage = message.filter(mes => {
     if (
       mes.userId === id ||
@@ -77,29 +82,40 @@ function ReturnLastMessage(m: User, message: Message[], id: string): Message {
       return false;
     }
   });
-  const lastMessageDate = matchesMessage
-    .map(e => e.date)
-    .sort()
-    .reverse()
-    .pop();
+  if (matchesMessage[0]) {
+    const lastMessageDate = matchesMessage
+      .map(e => e.date)
+      .sort()
+      .reverse()
+      .shift();
 
-  const lastMessage = matchesMessage.reduce((res, mes) => {
-    if (mes.date === lastMessageDate) return mes;
-    else return res;
-  });
-  return lastMessage;
+    const lastMessage = matchesMessage.reduce((res, mes) => {
+      if (mes.date === lastMessageDate) return mes;
+      else return res;
+    });
+
+    return lastMessage;
+  } else return null;
 }
 
 function CreateMatchesWithLastMessage(
   id: string,
   MatchesMap: { [key: string]: matchesLoaderType[] },
   m: User,
-  lastMessage: Message
+  lastMessage: Message | null
 ): Boolean {
-  if (MatchesMap[id] === undefined) {
-    MatchesMap[id] = [{ User: m, lastMessage: lastMessage.text }];
+  if (lastMessage) {
+    if (!MatchesMap[id]) {
+      MatchesMap[id] = [{ User: m, lastMessage: lastMessage!.text }];
+    } else {
+      MatchesMap[id].push({ User: m, lastMessage: lastMessage!.text });
+    }
   } else {
-    MatchesMap[id].push({ User: m, lastMessage: lastMessage.text });
+    if (!MatchesMap[id]) {
+      MatchesMap[id] = [{ User: m, lastMessage: null }];
+    } else {
+      MatchesMap[id].push({ User: m, lastMessage: null });
+    }
   }
   return true;
 }

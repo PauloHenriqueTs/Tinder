@@ -3,8 +3,6 @@ export type Maybe<T> = T | null;
 export interface MessageInput {
   text?: Maybe<string>;
 
-  userId: string;
-
   matcheId: string;
 }
 
@@ -127,6 +125,50 @@ export type MeUser = {
   like: Maybe<string[]>;
 
   deslike: Maybe<string[]>;
+};
+
+export type FindUserVariables = {};
+
+export type FindUserSubscription = {
+  __typename?: "Subscription";
+
+  finduser: Maybe<FindUserFinduser>;
+};
+
+export type FindUserFinduser = {
+  __typename?: "User";
+
+  id: string;
+
+  email: string;
+
+  name: string;
+
+  pictureUrl: Maybe<string>;
+
+  bio: Maybe<string>;
+
+  lastMessage: Maybe<string>;
+
+  like: Maybe<string[]>;
+
+  deslike: Maybe<string[]>;
+
+  matches: Maybe<FindUserMatches[]>;
+};
+
+export type FindUserMatches = {
+  __typename?: "matchesLoaderType";
+
+  User: Maybe<FindUserUser>;
+
+  lastMessage: Maybe<string>;
+};
+
+export type FindUserUser = {
+  __typename?: "User";
+
+  id: string;
 };
 
 import * as ReactApollo from "react-apollo";
@@ -406,4 +448,59 @@ export function MeHOC<TProps, TChildProps = any>(
     MeVariables,
     MeProps<TChildProps>
   >(MeDocument, operationOptions);
+}
+export const FindUserDocument = gql`
+  subscription FindUser {
+    finduser {
+      id
+      email
+      name
+      pictureUrl
+      bio
+      lastMessage
+      like
+      deslike
+      matches {
+        User {
+          id
+        }
+        lastMessage
+      }
+    }
+  }
+`;
+export class FindUserComponent extends React.Component<
+  Partial<
+    ReactApollo.SubscriptionProps<FindUserSubscription, FindUserVariables>
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Subscription<FindUserSubscription, FindUserVariables>
+        subscription={FindUserDocument}
+        {...(this as any)["props"] as any}
+      />
+    );
+  }
+}
+export type FindUserProps<TChildProps = any> = Partial<
+  ReactApollo.DataProps<FindUserSubscription, FindUserVariables>
+> &
+  TChildProps;
+export function FindUserHOC<TProps, TChildProps = any>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        FindUserSubscription,
+        FindUserVariables,
+        FindUserProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.graphql<
+    TProps,
+    FindUserSubscription,
+    FindUserVariables,
+    FindUserProps<TChildProps>
+  >(FindUserDocument, operationOptions);
 }
