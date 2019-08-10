@@ -2,7 +2,7 @@ import React from "react";
 import { Container } from "../components/ContainerStyle";
 import { SideBar } from "../components/view/Sidebar";
 import { withAuth } from "../components/controller/withAuth";
-import { MatchesController } from "../components/controller/MatchesController";
+import { MatcheModel } from "../components/test/MatcheModel";
 
 class Matches extends React.Component<any> {
   render() {
@@ -10,7 +10,8 @@ class Matches extends React.Component<any> {
     return (
       <Container>
         <SideBar user={me} size={"33vw"} />
-        <MatchesController size={"33vw"} />
+        <MatcheModel />
+
         <div />
       </Container>
     );

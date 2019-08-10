@@ -13,15 +13,15 @@ export const MatchesWithoutMessage: FunctionComponent<Props> = props => {
   if (props.matches && props.user && props.user.matches) {
     return (
       <div style={{ display: "flex", justifyContent: "flex-start" }}>
-        {props.user.matches.map(m =>
+        {props.user.matches.map((m, index) =>
           !m.lastMessage ? (
-            <Content id={m.User!.id} key={m.User!.id}>
+            <Content id={m.User!.id} key={index}>
               <Img url={m.User!.pictureUrl ? m.User!.pictureUrl : imageNull}>
                 <ContentText>{m.User!.name}</ContentText>
               </Img>
             </Content>
           ) : (
-            <div />
+            <div key={index} />
           )
         )}
       </div>

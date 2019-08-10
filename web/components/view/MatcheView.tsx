@@ -1,6 +1,6 @@
-import React, { FunctionComponent, useState, useEffect } from "react";
-import { interpolate, animated, useSpring } from "react-spring";
-import { useDrag } from "react-use-gesture";
+import React from "react";
+
+import { Gesture, withGesture } from "react-with-gesture";
 import styled from "styled-components";
 import {
   LikeMutation,
@@ -9,15 +9,70 @@ import {
   Maybe
 } from "../../generated/apolloComponents";
 import { MutationFn } from "react-apollo";
-
+import { Spring, interpolate, animated } from "react-spring/renderprops.cjs";
 interface Props {
   user: Maybe<FindUserFinduser>;
   size: string;
-  likeFunction: MutationFn<LikeMutation, LikeVariables>;
+  likeFunction?: MutationFn<LikeMutation, LikeVariables>;
 }
-
+interface State {
+  dropX: number;
+}
 const imageNull = "/static/ImageNull.png";
 
+export class MatcheView extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+
+    this.state = {
+      dropX: 0
+    };
+  }
+
+  public render() {
+    const translate = (x: number, y: number) => {
+      return `translate3d(${x}px, ${y}px, 0) rotate(${x / 10}deg)`;
+    };
+    return (
+      <Gesture>
+        {({ down, delta }) => {
+          if (!down) {
+            this.setState({ dropX: delta[0] });
+            return (
+              <Spring
+                native
+                to={{ x: down ? delta[0] : 0, y: down ? delta[1] : 0 }}
+                immediate={name => down && name === "x"}
+              >
+                {({ x, y }) => {
+                  const { user, size } = this.props;
+                  return (
+                    <Container
+                      style={{
+                        transform: interpolate([x, y], translate as any),
+                        backgroundImage: `url(${
+                          user!.pictureUrl ? user!.pictureUrl : imageNull
+                        })`
+                      }}
+                      size={size}
+                      key={user!.id}
+                    >
+                      <animated.div className={"title1"}>
+                        {user!.name}
+                      </animated.div>
+                    </Container>
+                  );
+                }}
+              </Spring>
+            );
+          }
+        }}
+      </Gesture>
+    );
+  }
+}
+
+/*
 export const MatcheView: FunctionComponent<Props> = props => {
   const [windowWidthBound, setWindoWidthBound] = useState(0);
   const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }));
@@ -48,7 +103,7 @@ export const MatcheView: FunctionComponent<Props> = props => {
         variables: { matcheid: props.user!.id }
       });
 
-      if (result && result.data) {
+      if (result && result!.data!.like) {
         window.location.href = window.location.href;
       }
     }
@@ -63,6 +118,7 @@ export const MatcheView: FunctionComponent<Props> = props => {
         })`
       }}
       size={props.size}
+      key={props.user!.id}
     >
       <animated.div {...bind()} className={"title1"}>
         {props.user!.name}
@@ -70,7 +126,7 @@ export const MatcheView: FunctionComponent<Props> = props => {
     </Container>
   );
 };
-
+*/
 const Container = styled(animated.div)`
   background-color: transparent;
   width: ${(props: { size: string }) => props.size};

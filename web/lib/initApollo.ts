@@ -8,6 +8,7 @@ import { onError } from "apollo-link-error";
 import { split } from "apollo-link";
 import { HttpLink } from "apollo-link-http";
 import { WebSocketLink } from "apollo-link-ws";
+
 import { getMainDefinition } from "apollo-utilities";
 import fetch from "isomorphic-unfetch";
 import Router from "next/router";

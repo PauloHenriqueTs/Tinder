@@ -1255,6 +1255,11 @@ apollo-cache-inmemory@^1.4.2:
     optimism "^0.6.9"
     tslib "^1.9.3"
 
+apollo-cache-persist@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/apollo-cache-persist/-/apollo-cache-persist-0.1.1.tgz#e6cfe1983b998982a679aaf05241d3ed395edb1e"
+  integrity sha512-/7GAyblPR169ryW3ugbtHqiU0UGkhIt10NeaO2gn2ClxjLHF/nIkJD5mx/0OCF2vLNbbnzLZVDeIO1pf72TrEA==
+
 apollo-cache@1.1.25, apollo-cache@^1.1.25:
   version "1.1.25"
   resolved "https://registry.yarnpkg.com/apollo-cache/-/apollo-cache-1.1.25.tgz#87a15a2a19993bb07234ccee6839b59d6fb49ac5"
@@ -6222,6 +6227,11 @@ react-use-gesture@^5.2.2:
   version "5.2.2"
   resolved "https://registry.yarnpkg.com/react-use-gesture/-/react-use-gesture-5.2.2.tgz#f4777314f700d5b2cd5350b0bcfe6eab1bb2cef3"
   integrity sha512-MT3uiQAGHUYS6Osyw7DpeTxgnTe/PAEX1oIYTxVersJOnk2e2UFDkEM6CfljWsQcOhqVZoK0a6krxYbm7+smmw==
+
+react-with-gesture@^4.0.8:
+  version "4.0.8"
+  resolved "https://registry.yarnpkg.com/react-with-gesture/-/react-with-gesture-4.0.8.tgz#ce6db9e667ef13120797e641f1a00f934aed6c36"
+  integrity sha512-VIJ1K2/UT67m+OnqYIgJUdYEqVmJDPfbZBoqUMYKts6WA0EbEC7YRMBEzxgy/jvVdafg9L2GSuFtUokpskKHag==
 
 react@^16.3.2, react@^16.8.6:
   version "16.8.6"

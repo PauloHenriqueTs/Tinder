@@ -1,18 +1,18 @@
 import * as React from "react";
 
 import styled from "styled-components";
-import { MatcheView } from "../components/view/MatcheView";
+import { Test2 } from "../components/test/test2";
 
 export default () => (
   <Container>
-    <MatcheView user={User.data.me} size={"33vw"} />
+    <Test2 />
   </Container>
 );
 
 const Container = styled.div`
   display: flex;
 
-  background-color: #f1f9ff;
+  background-color: red;
   justify-content: center;
 `;
 

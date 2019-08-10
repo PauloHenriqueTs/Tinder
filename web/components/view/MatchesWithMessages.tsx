@@ -19,7 +19,7 @@ export const MatchesWithMessage: FunctionComponent<Props> = props => {
           flexDirection: "column"
         }}
       >
-        {props.user.matches.map(m =>
+        {props.user.matches.map((m, index) =>
           m.lastMessage ? (
             <Content id={m.User!.id} key={m.User!.id}>
               <Img url={m.User!.pictureUrl ? m.User!.pictureUrl : imageNull} />
@@ -35,7 +35,7 @@ export const MatchesWithMessage: FunctionComponent<Props> = props => {
               </div>
             </Content>
           ) : (
-            <div />
+            <div key={index} />
           )
         )}
       </div>

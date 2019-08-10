@@ -41,24 +41,12 @@ export type LogoutMutation = {
   logout: boolean;
 };
 
-export type FindmatcheruserVariables = {};
+export type PickuserVariables = {};
 
-export type FindmatcheruserQuery = {
-  __typename?: "Query";
+export type PickuserMutation = {
+  __typename?: "Mutation";
 
-  findmatcheruser: Maybe<FindmatcheruserFindmatcheruser>;
-};
-
-export type FindmatcheruserFindmatcheruser = {
-  __typename?: "User";
-
-  id: string;
-
-  name: string;
-
-  pictureUrl: Maybe<string>;
-
-  bio: Maybe<string>;
+  pickuser: boolean;
 };
 
 export type HelloVariables = {};
@@ -306,50 +294,47 @@ export function LogoutHOC<TProps, TChildProps = any>(
     LogoutProps<TChildProps>
   >(LogoutDocument, operationOptions);
 }
-export const FindmatcheruserDocument = gql`
-  query Findmatcheruser {
-    findmatcheruser {
-      id
-      name
-      pictureUrl
-      bio
-    }
+export const PickuserDocument = gql`
+  mutation Pickuser {
+    pickuser
   }
 `;
-export class FindmatcheruserComponent extends React.Component<
-  Partial<
-    ReactApollo.QueryProps<FindmatcheruserQuery, FindmatcheruserVariables>
-  >
+export class PickuserComponent extends React.Component<
+  Partial<ReactApollo.MutationProps<PickuserMutation, PickuserVariables>>
 > {
   render() {
     return (
-      <ReactApollo.Query<FindmatcheruserQuery, FindmatcheruserVariables>
-        query={FindmatcheruserDocument}
+      <ReactApollo.Mutation<PickuserMutation, PickuserVariables>
+        mutation={PickuserDocument}
         {...(this as any)["props"] as any}
       />
     );
   }
 }
-export type FindmatcheruserProps<TChildProps = any> = Partial<
-  ReactApollo.DataProps<FindmatcheruserQuery, FindmatcheruserVariables>
+export type PickuserProps<TChildProps = any> = Partial<
+  ReactApollo.MutateProps<PickuserMutation, PickuserVariables>
 > &
   TChildProps;
-export function FindmatcheruserHOC<TProps, TChildProps = any>(
+export type PickuserMutationFn = ReactApollo.MutationFn<
+  PickuserMutation,
+  PickuserVariables
+>;
+export function PickuserHOC<TProps, TChildProps = any>(
   operationOptions:
     | ReactApollo.OperationOption<
         TProps,
-        FindmatcheruserQuery,
-        FindmatcheruserVariables,
-        FindmatcheruserProps<TChildProps>
+        PickuserMutation,
+        PickuserVariables,
+        PickuserProps<TChildProps>
       >
     | undefined
 ) {
   return ReactApollo.graphql<
     TProps,
-    FindmatcheruserQuery,
-    FindmatcheruserVariables,
-    FindmatcheruserProps<TChildProps>
-  >(FindmatcheruserDocument, operationOptions);
+    PickuserMutation,
+    PickuserVariables,
+    PickuserProps<TChildProps>
+  >(PickuserDocument, operationOptions);
 }
 export const HelloDocument = gql`
   query Hello {

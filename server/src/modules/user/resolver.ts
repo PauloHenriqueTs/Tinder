@@ -102,20 +102,28 @@ export class UserResolver {
       });
 
       if (matche && user) {
-        if (!matche.like.includes(userid)) {
-          matche!.like.push(userid);
-          await User.save(matche);
+        if (!user.like.includes(matcheid)) {
+          user!.like.push(matcheid);
+          await User.save(user);
+        }
+        const test = user.like.concat(userid).concat(user.deslike);
+        const likenotifyuser = await User.findOne({
+          where: {
+            id: Not(In(test))
+          }
+        });
+        console.log(likenotifyuser);
+        if (likenotifyuser) {
+          await notifyAboutlike({
+            user: likenotifyuser
+          });
+        } else {
+          await notifyAboutlike({
+            user: null
+          });
         }
 
-        const likenotifyuser = await User.findOne({
-          where: { id: Not(userid), deslike: Not(userid), like: Not(userid) }
-        });
-
-        await notifyAboutlike({
-          user: likenotifyuser
-        });
-
-        if (user!.like.includes(matcheid)) {
+        if (matche.like.includes(userid)) {
           const TheyGiveMatche = await Matches.find({
             join: {
               alias: "matches"
@@ -171,24 +179,50 @@ export class UserResolver {
       return false;
     }
   }
-  @Query(() => User, { nullable: true })
-  async findmatcheruser(@Ctx() ctx: MyContext): Promise<User | undefined> {
+  @Mutation(() => Boolean)
+  async pickuser(
+    @Ctx() ctx: MyContext,
+    @PubSub("User")
+    notifyAboutlike: Publisher<likePayloader>
+  ): Promise<Boolean> {
     const userid = ctx.req.session!.userId;
-
-    return User.findOne({
-      where: { id: Not(userid), deslike: Not(userid), like: Not(userid) }
+    const user = await User.findOne({
+      where: {
+        id: userid
+      }
     });
+    console.log(user);
+    if (user) {
+      const test = user.like.concat(userid).concat(user.deslike);
+      const likenotifyuser = await User.findOne({
+        where: {
+          id: Not(In(test))
+        }
+      });
+      if (likenotifyuser) {
+        await notifyAboutlike({
+          user: likenotifyuser
+        });
+      } else {
+        await notifyAboutlike({
+          user: null
+        });
+      }
+
+      return true;
+    }
+    return false;
   }
 
   @Subscription(() => User, {
     topics: "User",
     nullable: true
   })
-  async finduser(@Root() newMessage: likePayloader): Promise<User | undefined> {
+  async finduser(@Root() newMessage: likePayloader): Promise<User | null> {
     return newMessage.user;
   }
 }
 
 interface likePayloader {
-  user: User | undefined;
+  user: User | null;
 }
