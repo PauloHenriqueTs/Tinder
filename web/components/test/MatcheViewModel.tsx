@@ -78,7 +78,6 @@ export default class MatcheViewModel extends React.Component<
                       }
                     }}
                   >
-                    {data.finduser.id}
                     <MatcheViewController
                       matche={data.finduser}
                       x={x}

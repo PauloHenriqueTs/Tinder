@@ -37,6 +37,7 @@ export class MessageResolver {
       matcheId: input.matcheId,
       date: new Date()
     }).save();
+
     await notifyAboutNewMessage({
       text: message.text,
       userId: message.userId,

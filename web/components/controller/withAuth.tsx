@@ -11,12 +11,14 @@ export const withAuth = <T extends object>(C: React.ComponentClass<T>) => {
       if (!response || !response.data || !response.data.me) {
         redirect(ctx, "/FacebookLogin");
         return {
-          me: null
+          me: null,
+          query: null
         };
       }
 
       return {
-        me: response.data.me
+        me: response.data.me,
+        query: ctx.query
       };
     }
 

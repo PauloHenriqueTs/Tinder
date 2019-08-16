@@ -17,6 +17,7 @@ export interface MatcheModelProps {
   FindMatcherSubscription: FindUserProps;
   LikeMutation: LikeProps;
   DeslikeMutation: DeslikeProps;
+  showPerfil: boolean;
 }
 
 export interface MatcheModelState {}

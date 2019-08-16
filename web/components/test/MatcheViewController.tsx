@@ -1,6 +1,7 @@
 import * as React from "react";
 import { FindUserFinduser } from "../../generated/apolloComponents";
 import { MatcheView1 } from "./MatcheView1";
+import { PerfilView } from "../view/PerfilView";
 
 export interface MatcheViewControllerProps {
   matche: FindUserFinduser | null;
@@ -13,7 +14,7 @@ export interface MatcheViewControllerProps {
 
 export interface MatcheViewControllerState {
   matche: FindUserFinduser | null;
-
+  showprofile: boolean;
   x: number;
   y: number;
 }
@@ -27,7 +28,7 @@ export default class MatcheViewController extends React.Component<
 
     this.state = {
       matche: null,
-
+      showprofile: false,
       x: 0,
       y: 0
     };
@@ -39,8 +40,11 @@ export default class MatcheViewController extends React.Component<
 
   shouldComponentUpdate(nextpros: MatcheViewControllerProps) {
     const { matche } = this.props;
-
-    return false;
+    if (nextpros.matche === matche) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   componentDidUpdate() {
@@ -58,11 +62,28 @@ export default class MatcheViewController extends React.Component<
 
   public render() {
     const { matche } = this.props;
-    const { x, y } = this.state;
+    const { x, y, showprofile } = this.state;
+
+    console.log(showprofile);
     if (matche) {
-      return (
-        <MatcheView1 matche={matche} translate={this.translate} x={x} y={y} />
-      );
+      if (!showprofile) {
+        return (
+          <div onClick={() => this.setState({ showprofile: true })}>
+            <MatcheView1
+              matche={matche}
+              translate={this.translate}
+              x={x}
+              y={y}
+            />
+          </div>
+        );
+      } else {
+        return (
+          <div onClick={() => this.setState({ showprofile: true })}>
+            <PerfilView user={matche} size={"33vw"} />
+          </div>
+        );
+      }
     } else {
       return <div />;
     }

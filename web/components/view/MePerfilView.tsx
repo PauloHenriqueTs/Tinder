@@ -1,8 +1,6 @@
 import React, { FunctionComponent } from "react";
 import styled from "styled-components";
 import { MeUser } from "../../generated/apolloComponents";
-import LikeButton from "./LikeButton";
-import DeslikeButton from "./DeslikeButton";
 interface Props {
   user: MeUser;
   size?: string;
@@ -12,7 +10,7 @@ interface ContainerProps {
 }
 const imageNull = "/static/ImageNull.png";
 
-export const PerfilView: FunctionComponent<Props> = props => {
+export const MePerfilView: FunctionComponent<Props> = props => {
   return (
     <div style={{ marginTop: "1vh" }}>
       <Container
@@ -30,8 +28,7 @@ export const PerfilView: FunctionComponent<Props> = props => {
         <p className="title">{props.user.bio ? props.user.bio : " "}</p>
       </Container>
       <Center1>
-        <DeslikeButton />
-        <LikeButton />
+        <button>Edit</button>
       </Center1>
     </div>
   );
@@ -83,11 +80,31 @@ const Center = styled.div`
 `;
 
 const Center1 = styled.div`
-  position: fixed;
-  bottom: 2rem;
+  position: relative;
+  bottom: 10vh;
   text-align: center;
   button {
-    margin-left: 5vw;
-    margin-right: 5vw;
+    border: none;
+    border-radius: 1rem;
+    outline: 0;
+    display: inline-block;
+    padding: 8px;
+    margin-bottom: 0rem;
+    color: white;
+
+    background: linear-gradient(
+      to right,
+      #fe6b8b 0%,
+      #f75006 68%,
+      #ff8e53 100%
+    );
+    text-align: center;
+    cursor: pointer;
+    width: 50%;
+    font-size: 18px;
+  }
+
+  button:hover {
+    transform: scale(1.01);
   }
 `;

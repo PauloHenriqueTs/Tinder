@@ -1,21 +1,20 @@
 import React from "react";
 import { Container } from "../components/ContainerStyle";
 import { SideBar } from "../components/view/Sidebar";
-import { withAuth } from "../components/controller/withAuth";
-import { MatcheModel } from "../components/test/MatcheModel";
 
-class Matches extends React.Component<any> {
+import { withAuth } from "../components/controller/withAuth";
+import { MePerfilView } from "../components/view/MePerfilView";
+
+class Perfil extends React.Component<any> {
   render() {
     const { me } = this.props;
-
     return (
       <Container>
         <SideBar user={me} size={"33vw"} />
-        <MatcheModel />
+        <MePerfilView user={me} size={"33vw"} />
         <div />
       </Container>
     );
   }
 }
-
-export default withAuth(Matches);
+export default withAuth(Perfil);

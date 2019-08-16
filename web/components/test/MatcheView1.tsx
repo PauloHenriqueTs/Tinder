@@ -2,6 +2,8 @@ import * as React from "react";
 import { FindUserFinduser } from "../../generated/apolloComponents";
 import { animated, interpolate } from "react-spring/renderprops.cjs";
 import styled from "styled-components";
+import DeslikeButton from "../view/DeslikeButton";
+import LikeButton from "../view/LikeButton";
 
 interface MatcheViewProps {
   matche: FindUserFinduser | null;
@@ -15,16 +17,22 @@ const imageNull = "/static/ImageNull.png";
 export const MatcheView1: React.FunctionComponent<MatcheViewProps> = props => {
   const { matche, translate, x, y } = props;
   return (
-    <Container
-      style={{
-        transform: interpolate([x, y], translate as any),
-        backgroundImage: `url(${imageNull})`
-      }}
-      size={"33vw"}
-      key={matche!.id}
-    >
-      <animated.div className={"title1"}>{matche!.name}</animated.div>
-    </Container>
+    <div style={{ display: "flex", flexDirection: "column" }}>
+      <Container
+        style={{
+          transform: interpolate([x, y], translate as any),
+          backgroundImage: `url(${imageNull})`
+        }}
+        size={"33vw"}
+        key={matche!.id}
+      >
+        <animated.div className={"title1"}>{matche!.name}</animated.div>
+      </Container>
+      <Center1>
+        <DeslikeButton />
+        <LikeButton />
+      </Center1>
+    </div>
   );
 };
 
@@ -53,4 +61,16 @@ const Container = styled(animated.div)`
     white-space: pre-wrap;
   }
   will-change: transform;
+
+  display: flex;
+`;
+
+const Center1 = styled.div`
+  position: fixed;
+  bottom: 2rem;
+  text-align: center;
+  button {
+    margin-left: 5vw;
+    margin-right: 5vw;
+  }
 `;

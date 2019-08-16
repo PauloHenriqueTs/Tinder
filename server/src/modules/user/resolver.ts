@@ -58,6 +58,13 @@ export class UserResolver {
       return null;
     }
   }
+  @Query(() => User, { nullable: true })
+  async matcheuser(
+    @Arg("matcheid") matcheid: string
+  ): Promise<User | undefined> {
+    return User.findOne({ where: { id: matcheid } });
+  }
+
   @Mutation(() => User, { nullable: true })
   async login(
     @Arg("email") email: string,
@@ -112,7 +119,6 @@ export class UserResolver {
             id: Not(In(test))
           }
         });
-        console.log(likenotifyuser);
         if (likenotifyuser) {
           await notifyAboutlike({
             user: likenotifyuser
@@ -133,7 +139,6 @@ export class UserResolver {
               last_like_userid: In([userid, matcheid])
             }
           });
-          console.log(TheyGiveMatche);
           if (!TheyGiveMatche[0]) {
             await Matches.create({
               first_like_userid: userid,
@@ -191,7 +196,6 @@ export class UserResolver {
         id: userid
       }
     });
-    console.log(user);
     if (user) {
       const test = user.like.concat(userid).concat(user.deslike);
       const likenotifyuser = await User.findOne({

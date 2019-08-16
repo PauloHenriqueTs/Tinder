@@ -1,6 +1,6 @@
-import { ID, Field, ArgsType } from "type-graphql";
+import { Field, ArgsType } from "type-graphql";
 @ArgsType()
 export class NewMessageArgs {
-  @Field(() => ID)
+  @Field(() => String)
   matcheId: string;
 }

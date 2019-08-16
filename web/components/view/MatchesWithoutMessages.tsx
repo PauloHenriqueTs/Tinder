@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from "react";
 import styled from "styled-components";
 import { MeMe } from "../../generated/apolloComponents";
+import Router from "next/router";
 
 const imageNull = "/static/ImageNull.png";
 
@@ -15,7 +16,11 @@ export const MatchesWithoutMessage: FunctionComponent<Props> = props => {
       <div style={{ display: "flex", justifyContent: "flex-start" }}>
         {props.user.matches.map((m, index) =>
           !m.lastMessage ? (
-            <Content id={m.User!.id} key={index}>
+            <Content
+              id={m.User!.id}
+              key={index}
+              onClick={() => Router.push(`/matches/messages/${m.User!.id}`)}
+            >
               <Img url={m.User!.pictureUrl ? m.User!.pictureUrl : imageNull}>
                 <ContentText>{m.User!.name}</ContentText>
               </Img>

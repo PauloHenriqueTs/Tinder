@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { MeMe } from "../../generated/apolloComponents";
 import { MatchesWithoutMessage } from "./MatchesWithoutMessages";
 import { MatchesWithMessage } from "./MatchesWithMessages";
+import Router from "next/router";
 
 const imageNull = "/static/ImageNull.png";
 
@@ -13,15 +14,19 @@ interface Props {
 
 export const SideBar: FunctionComponent<Props> = props => {
   const [matches, setMatches] = useState<Boolean>(true);
+
   return (
     <Container size={props.size}>
       {props.children}
       <ContainerButton>
         <ContentMenu>
-          <Button style={{ width: "1rem" }} onClick={() => console.log("ok1")}>
+          <Button
+            style={{ width: "1rem", marginLeft: "1em" }}
+            onClick={() => Router.back()}
+          >
             {"<"}
           </Button>
-          <Button onClick={() => console.log("ok")}>
+          <Button onClick={() => Router.push("/myperfil")}>
             <Img
               src={props.user.pictureUrl ? props.user.pictureUrl : imageNull}
             />
@@ -67,7 +72,7 @@ const ContainerButton = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 120px;
-  border-radius: 2%;
+  border-radius: 0 2% 2% 0;
   border-color: transparent;
   background: linear-gradient(to right, #fe6b8b 0%, #f75006 68%, #ff8e53 100%);
 `;
