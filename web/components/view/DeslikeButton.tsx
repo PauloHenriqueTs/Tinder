@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function DeslikeButton() {
+export default function DeslikeButton(props: any) {
   return (
-    <BtnDeslike size={"5rem"}>
+    <BtnDeslike size={"5rem"} onClick={props.onClick}>
       <svg viewBox="0 0 50.469 59.929">
         <defs>
           <linearGradient

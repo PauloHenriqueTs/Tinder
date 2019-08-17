@@ -28,8 +28,9 @@ export default (App: any) => {
         router,
         ctx: { req, res }
       } = ctx;
+
       const apollo = initApollo(
-        {},
+        { env: process.env },
         {
           getToken: () => parseCookies(req).qid
         }

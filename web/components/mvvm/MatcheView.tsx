@@ -2,19 +2,19 @@ import * as React from "react";
 import { FindUserFinduser } from "../../generated/apolloComponents";
 import { animated, interpolate } from "react-spring/renderprops.cjs";
 import styled from "styled-components";
-import DeslikeButton from "../view/DeslikeButton";
-import LikeButton from "../view/LikeButton";
 
 interface MatcheViewProps {
   matche: FindUserFinduser | null;
   translate: (x: number, y: number) => string;
   x: number;
   y: number;
+  like: (matcheid: string) => any;
+  deslike: (matcheid: string) => any;
 }
 
 const imageNull = "/static/ImageNull.png";
 
-export const MatcheView1: React.FunctionComponent<MatcheViewProps> = props => {
+export const MatcheView: React.FunctionComponent<MatcheViewProps> = props => {
   const { matche, translate, x, y } = props;
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
@@ -28,10 +28,6 @@ export const MatcheView1: React.FunctionComponent<MatcheViewProps> = props => {
       >
         <animated.div className={"title1"}>{matche!.name}</animated.div>
       </Container>
-      <Center1>
-        <DeslikeButton />
-        <LikeButton />
-      </Center1>
     </div>
   );
 };
@@ -63,14 +59,4 @@ const Container = styled(animated.div)`
   will-change: transform;
 
   display: flex;
-`;
-
-const Center1 = styled.div`
-  position: fixed;
-  bottom: 2rem;
-  text-align: center;
-  button {
-    margin-left: 5vw;
-    margin-right: 5vw;
-  }
 `;

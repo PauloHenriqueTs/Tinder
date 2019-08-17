@@ -1,6 +1,7 @@
 import { createServer } from "http";
 import * as next from "next";
 import { routes } from "./routes";
+require("dotenv").config();
 
 const port = parseInt(process.env.PORT!, 10) || 3000;
 const dev = process.env.NODE_ENV !== "production";
@@ -12,6 +13,7 @@ app.prepare().then(() => {
     handle(req, res);
   }).listen(port, (err: any) => {
     if (err) throw err;
+    console.log(process.env);
     console.log(`> Ready on http://localhost:${port}`);
   });
 });

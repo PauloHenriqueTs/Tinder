@@ -1,8 +1,7 @@
 import React, { FunctionComponent } from "react";
 import styled from "styled-components";
 import { MeUser } from "../../generated/apolloComponents";
-import LikeButton from "./LikeButton";
-import DeslikeButton from "./DeslikeButton";
+
 interface Props {
   user: MeUser;
   size?: string;
@@ -29,10 +28,6 @@ export const PerfilView: FunctionComponent<Props> = props => {
         <div className="line" />
         <p className="title">{props.user.bio ? props.user.bio : " "}</p>
       </Container>
-      <Center1>
-        <DeslikeButton />
-        <LikeButton />
-      </Center1>
     </div>
   );
 };
@@ -80,14 +75,4 @@ const Container = styled.div`
 
 const Center = styled.div`
   text-align: center;
-`;
-
-const Center1 = styled.div`
-  position: fixed;
-  bottom: 2rem;
-  text-align: center;
-  button {
-    margin-left: 5vw;
-    margin-right: 5vw;
-  }
 `;

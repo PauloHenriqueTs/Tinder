@@ -14,6 +14,7 @@ import {
 import styled from "styled-components";
 import { Formik, Field } from "formik";
 import { InputField } from "../fields/InputField";
+import Router from "next/router";
 
 interface Props {
   size: string;
@@ -87,70 +88,87 @@ export class MessagesController extends React.PureComponent<Props, State> {
               updateQuery: (prev: any, { subscriptionData }: any) => {
                 if (!subscriptionData.data) return prev;
                 const { newMessages } = subscriptionData.data;
-                console.log(prev.findMessage[prev.findMessage.length - 1]);
-                if (
-                  prev.findMessage[prev.findMessage.length - 1].date ===
-                  newMessages.date
-                )
-                  return prev;
 
-                return {
-                  ...prev,
-                  findMessage: [...prev.findMessage, newMessages]
-                };
+                if (
+                  prev.findMessage[prev.findMessage.length - 1] &&
+                  prev.findMessage[prev.findMessage.length - 1].date ===
+                    newMessages.date
+                ) {
+                  return prev;
+                } else {
+                  return {
+                    ...prev,
+                    findMessage: [...prev.findMessage, newMessages]
+                  };
+                }
               }
             });
           }
+          if (data) {
+            return (
+              <Container size={this.props.size}>
+                <div className={"info"}>
+                  <img
+                    src={matche.pictureUrl ? matche.pictureUrl : imageNull}
+                  />
 
-          return (
-            <Container size={this.props.size}>
-              <div className={"info"}>
-                <img src={matche.pictureUrl ? matche.pictureUrl : imageNull} />
-                {matche.name}
-              </div>
-              <div className={"messages-content"}>
-                {data.findMessage.map((d: any, index: number) => {
-                  const mes =
-                    data.findMessage[data.findMessage.length - 1 - index];
-                  return (
-                    <div
-                      className={
-                        user!.id !== mes.userId
-                          ? "message-me"
-                          : "message-matche"
-                      }
-                      key={index}
-                    >
-                      {mes.text}
-                    </div>
-                  );
-                })}
-              </div>
+                  <div>{matche.name}</div>
+                  <button onClick={() => Router.push("/matches")}>X</button>
+                </div>
+                <div className={"messages-content"}>
+                  {data
+                    ? data.findMessage.map((d: any, index: number) => {
+                        const mes =
+                          data.findMessage[data.findMessage.length - 1 - index];
 
-              <Formik
-                onSubmit={async data => {
-                  const response = await addNewMessage({
-                    variables: { text: data.text, matcheid: matche.id }
-                  });
-                }}
-                initialValues={{
-                  text: ""
-                }}
-              >
-                {({ handleSubmit }) => (
-                  <form onSubmit={handleSubmit}>
-                    <Field
-                      name="text"
-                      placeholder="text"
-                      component={InputField}
-                    />
+                        return (
+                          <div
+                            className={
+                              user!.id === mes.userId
+                                ? "message-me"
+                                : "message-matche"
+                            }
+                            key={index}
+                          >
+                            {mes.text}
+                          </div>
+                        );
+                      })
+                    : null}
+                </div>
 
-                    <button type="submit">submit</button>
-                  </form>
-                )}
-              </Formik>
-            </Container>
-          );
+                <Formik
+                  onSubmit={async data => {
+                    if (data.text !== "") {
+                      await addNewMessage({
+                        variables: { text: data.text, matcheid: matche.id }
+                      });
+                    }
+                  }}
+                  initialValues={{
+                    text: ""
+                  }}
+                >
+                  {({ handleSubmit }) => (
+                    <form onSubmit={handleSubmit} className={"form"}>
+                      <Field
+                        name="text"
+                        placeholder="text"
+                        component={InputField}
+                        autoComplete="off"
+                      />
+
+                      <button className={"buttonform"} type="submit">
+                        submit
+                      </button>
+                    </form>
+                  )}
+                </Formik>
+              </Container>
+            );
+          } else {
+            return <div />;
+          }
         }}
       </Composed>
     );
@@ -161,6 +179,7 @@ const Container = styled.div`
   width: ${(props: { size: string }) => props.size};
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   height: 100vh;
 
   .messages-content {
@@ -181,17 +200,29 @@ const Container = styled.div`
   }
   .info {
     display: flex;
-    justify-content: center;
-    height: 15%;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 10%;
     border-style: solid;
     border-width: 0px 0 0.05rem 0px;
     border-color: rgba(100, 100, 107, 0.4);
   }
 
   .info img {
-    width: 10%;
+    width: 5%;
+    height: 90%;
     border-radius: 50%;
 
+    display: block;
+    margin: 0 1rem;
+  }
+  .info button {
+    width: 5%;
+    height: 90%;
+    border-radius: 50%;
+    background-color: transparent;
+    border: 0px;
+    font-size: 2rem;
     display: block;
     margin: 0 1rem;
   }
@@ -220,5 +251,45 @@ const Container = styled.div`
     max-width: 82%;
     padding: 0.7rem;
     border-radius: 0.7rem;
+  }
+
+  .buttonform {
+    flex: 1;
+    height: 90%;
+    margin: 0;
+    padding: 0;
+    outline: none;
+    background: #7f8ff4;
+    color: #fff;
+    box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    &:hover {
+      background: darken(#7f8ff4, 4%);
+    }
+
+    &:active {
+      background: #7f8ff4;
+      box-shadow: inset 0 0 10px 2px rgba(0, 0, 0, 0.2);
+      border-color: transparent;
+    }
+    margin-top: 10px;
+    margin-left: -96px;
+    margin-bottom: 10px;
+  }
+
+  .form {
+    align-self: flex-end;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+
+    margin: 0 0 2% 0;
+    padding: 0;
+    border: 0;
+  }
+  .form div {
+    flex: 5;
   }
 `;

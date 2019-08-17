@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function LikeButton() {
+export default function LikeButton(props: any) {
   return (
-    <BtnLike size={"5rem"}>
+    <BtnLike size={"5rem"} onClick={props.onClick}>
       <svg viewBox="0 0 45.811 44.306">
         <path
           id="ic_favorite_24px"

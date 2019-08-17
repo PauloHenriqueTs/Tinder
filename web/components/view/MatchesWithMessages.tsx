@@ -35,6 +35,7 @@ export const MatchesWithMessage: FunctionComponent<Props> = props => {
                   flexDirection: "column"
                 }}
               >
+                {console.log(m)}
                 <div>{m.User!.name}</div>
                 <div style={{ marginTop: "1rem" }}>{m.lastMessage}</div>
               </div>

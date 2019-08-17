@@ -85,10 +85,7 @@ const startServer = async (): Promise<void> => {
   app.use(
     cors({
       credentials: true,
-      origin:
-        process.env.NODE_ENV === "production"
-          ? "https://www.codeponder.com"
-          : "http://localhost:3000"
+      origin: process.env.FRONT_END_URL
     })
   );
 
@@ -127,7 +124,7 @@ const startServer = async (): Promise<void> => {
       {
         clientID: process.env.FACEBOOK_ID || "",
         clientSecret: process.env.FACEBOOK_SECRET || "",
-        callbackURL: "http://localhost:4000/oauth/facebook",
+        callbackURL: `${process.env.BACK_END_URL}/oauth/facebook`,
         profileFields: [
           "displayName",
           "name",
@@ -177,7 +174,7 @@ const startServer = async (): Promise<void> => {
         req.session.accessToken = req.user.accessToken;
         req.session.refreshToken = req.user.refreshToken;
       }
-      res.redirect("http://localhost:3000/hello");
+      res.redirect(`${process.env.FRONT_END_URL}/matches`);
     }
   );
 

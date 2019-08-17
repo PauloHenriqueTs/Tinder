@@ -159,30 +159,48 @@ export class UserResolver {
   @Mutation(() => Boolean)
   async deslike(
     @Arg("matcheid") matcheid: string,
-    @Ctx() ctx: MyContext
+    @Ctx() ctx: MyContext,
+    @PubSub("User")
+    notifyAboutlike: Publisher<likePayloader>
   ): Promise<Boolean> {
     const userid = ctx.req.session!.userId;
-    const TheyGiveMatche = await Matches.find({
+    let user = await User.findOne({
       where: {
-        first_like_userid: In([userid, matcheid]),
-        last_like_userid: In([userid, matcheid])
+        id: userid
       }
     });
-    if (!TheyGiveMatche) {
-      return false;
-    } else {
-      let matche = await User.findOne({
+    let matche = await User.findOne({
+      where: {
+        id: matcheid
+      }
+    });
+    if (matche && user) {
+      if (
+        !matche.deslike.includes(userid) &&
+        !user.deslike.includes(matche.id)
+      ) {
+        matche!.deslike.push(userid);
+        user.deslike.push(matcheid);
+        await User.save(matche);
+        await User.save(user);
+      }
+      const test = user.like.concat(userid).concat(user.deslike);
+      const likenotifyuser = await User.findOne({
         where: {
-          id: matcheid
+          id: Not(In(test))
         }
       });
-      if (!matche!.like.includes(userid)) {
-        matche!.like.push(userid);
-        await User.save(matche!);
-        return true;
+      if (likenotifyuser) {
+        await notifyAboutlike({
+          user: likenotifyuser
+        });
+      } else {
+        await notifyAboutlike({
+          user: null
+        });
       }
-      return false;
-    }
+      return true;
+    } else return false;
   }
   @Mutation(() => Boolean)
   async pickuser(

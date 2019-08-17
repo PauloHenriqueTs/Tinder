@@ -71,17 +71,17 @@ function ReturnLastMessage(
   id: string
 ): Message | null {
   const matchesMessage = message.filter(mes => {
-    if (
-      mes.userId === id ||
-      mes.matcheId === id ||
-      mes.userId === m.id ||
-      mes.matcheId === m.id
-    ) {
+    if (mes.userId === id && mes.matcheId === m.id) {
+      return mes;
+    }
+    if (mes.matcheId === id && mes.userId === m.id) {
       return mes;
     } else {
       return false;
     }
   });
+  console.log(matchesMessage);
+
   if (matchesMessage[0]) {
     const lastMessageDate = matchesMessage
       .map(e => e.date)

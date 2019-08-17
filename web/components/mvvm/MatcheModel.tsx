@@ -40,7 +40,9 @@ export class MatcheModel extends React.Component<any, MatcheModelState> {
       ),
 
       DeslikeMutation: ({ render }) => (
-        <DeslikeComponent>{render}</DeslikeComponent>
+        <DeslikeComponent>
+          {(deslike, result) => (render ? render({ deslike, result }) : null)}
+        </DeslikeComponent>
       )
     });
     return (

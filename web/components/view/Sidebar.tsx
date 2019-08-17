@@ -22,7 +22,7 @@ export const SideBar: FunctionComponent<Props> = props => {
         <ContentMenu>
           <Button
             style={{ width: "1rem", marginLeft: "1em" }}
-            onClick={() => Router.back()}
+            onClick={() => Router.push("/matches")}
           >
             {"<"}
           </Button>

@@ -1,15 +1,28 @@
 import React from "react";
-import Layout from "../components/Layout";
 import { FacebookLogin } from "../components/view/FacebookLogin";
+import { MyContext } from "../interfaces/MyContext";
 
-const Facebook = () => {
+const Facebook = (props: any) => {
+  const url = `${props.env.BACK_END_URL}/auth/facebook`;
+
   return (
-    <Layout title="FacebookLogin page">
-      <a href="http://localhost:4000/auth/facebook">
-        <FacebookLogin />
-      </a>
-    </Layout>
+    <div style={{ display: "flex", justifyContent: "center" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column"
+        }}
+      >
+        <a href={url}>
+          <FacebookLogin />
+        </a>
+      </div>
+    </div>
   );
+};
+Facebook.getInitialProps = async ({ apolloClient, ...ctx }: MyContext) => {
+  return { env: process.env };
 };
 
 export default Facebook;

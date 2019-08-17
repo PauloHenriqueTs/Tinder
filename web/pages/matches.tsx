@@ -2,7 +2,7 @@ import React from "react";
 import { Container } from "../components/ContainerStyle";
 import { SideBar } from "../components/view/Sidebar";
 import { withAuth } from "../components/controller/withAuth";
-import { MatcheModel } from "../components/test/MatcheModel";
+import { MatcheModel } from "../components/mvvm/MatcheModel";
 
 class Matches extends React.Component<any> {
   render() {

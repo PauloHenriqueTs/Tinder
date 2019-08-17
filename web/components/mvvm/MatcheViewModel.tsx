@@ -4,6 +4,7 @@ import { FindUserFinduser } from "../../generated/apolloComponents";
 import MatcheViewController from "./MatcheViewController";
 import { Gesture } from "react-with-gesture";
 import { Spring, animated } from "react-spring/renderprops.cjs";
+import Router from "next/router";
 
 export interface MatcheViewModelProps {
   composed: MatcheModelProps;
@@ -31,6 +32,19 @@ export default class MatcheViewModel extends React.Component<
       const res = await LikeMutation.like({
         variables: { matcheid: matcheid }
       });
+      if (res.data.like) {
+        console.log(res.data.like);
+        Router.push(`/matches/messages/${matcheid}`);
+      }
+      return res;
+    }
+  };
+  deslike = async (matcheid: string) => {
+    const { DeslikeMutation } = this.props.composed;
+    if (DeslikeMutation) {
+      const res = await DeslikeMutation.deslike({
+        variables: { matcheid: matcheid }
+      });
 
       return res;
     }
@@ -38,7 +52,6 @@ export default class MatcheViewModel extends React.Component<
   componentDidMount() {
     const {
       FindMatcherSubscription: { data },
-      LikeMutation: { like },
       PickUserMutation: { pickuser }
     } = this.props.composed;
 
@@ -50,15 +63,14 @@ export default class MatcheViewModel extends React.Component<
   render() {
     const {
       FindMatcherSubscription: { data },
-      LikeMutation: { like },
-      PickUserMutation: { pickuser }
+      LikeMutation: { like }
     } = this.props.composed;
 
     if (data) {
       if (data.finduser) {
         return (
           <Gesture>
-            {({ down, delta, first }) => (
+            {({ down, delta }) => (
               <Spring
                 native
                 to={{
@@ -82,9 +94,8 @@ export default class MatcheViewModel extends React.Component<
                       matche={data.finduser}
                       x={x}
                       y={y}
-                      down={down}
-                      first={first}
                       like={this.like}
+                      deslike={this.deslike}
                     />
                   </animated.div>
                 )}
@@ -93,9 +104,9 @@ export default class MatcheViewModel extends React.Component<
           </Gesture>
         );
       }
-      return <div>ruim</div>;
+      return <div>Sorry, you don't have users near you.</div>;
     } else {
-      return <div>fgfgfdfg</div>;
+      return <div>loading...</div>;
     }
   }
 }

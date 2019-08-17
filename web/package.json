@@ -20,6 +20,7 @@
     "apollo-link-ws": "^1.0.18",
     "babel-plugin-import-static-files": "^1.0.4",
     "cookie": "^0.3.1",
+    "dotenv": "^8.0.0",
     "formik": "^1.4.3",
     "graphql": "^14.1.1",
     "isomorphic-unfetch": "^3.0.0",
