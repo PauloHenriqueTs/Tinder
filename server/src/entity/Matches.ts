@@ -7,12 +7,9 @@ import {
   PrimaryGeneratedColumn
 } from "typeorm";
 import { User } from "./User";
-import { ObjectType, Field, ID } from "type-graphql";
 
-@ObjectType()
 @Entity()
 export class Matches extends BaseEntity {
-  @Field(() => ID)
   @PrimaryGeneratedColumn("uuid")
   id: string;
 

@@ -27,12 +27,12 @@ interface Options {
 
 function create(initialState: any, { getToken }: Options) {
   const httpLink = new HttpLink({
-    uri: `${initialState.env.BACK_END_URL}/graphql`,
+    uri: initialState.env.BACK_END_URL as string,
     credentials: "include"
   });
   const wsLink = isBrowser
     ? new WebSocketLink({
-        uri: `${initialState.env.BACK_END_URL_WS}/graphql`,
+        uri: initialState.env.BACK_END_URL_WS as string,
         options: {
           reconnect: true
         }

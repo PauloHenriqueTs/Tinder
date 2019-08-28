@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 
 export const NewMessagesSubscription = gql`
-  subscription NewMessages($matcheid: String!) {
-    newMessages(matcheId: $matcheid) {
+  subscription newMessage($matcheid: String!) {
+    newMessage(matcheId: $matcheid) {
       text
       userId
       matcheId

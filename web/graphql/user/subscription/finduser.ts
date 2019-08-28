@@ -8,7 +8,6 @@ export const finduserSubscription = gql`
       name
       pictureUrl
       bio
-      lastMessage
       like
       deslike
       matches {

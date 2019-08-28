@@ -1,0 +1,3 @@
+type Query {
+  matcheuser(matcheid: String!): User
+}

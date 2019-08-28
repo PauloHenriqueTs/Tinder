@@ -1,0 +1,10 @@
+type Message {
+  matcheId: String!
+  date: String!
+  text: String!
+  userId: String!
+}
+
+type Query {
+  messages(matcheId: String!): [Message!]!
+}

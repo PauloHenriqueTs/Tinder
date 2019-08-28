@@ -2,14 +2,14 @@ import * as React from "react";
 import { adopt } from "react-adopt";
 
 import {
-  AddNewMessageProps,
-  FindMessagesProps,
-  AddNewMessageComponent,
-  FindMessagesComponent,
-  NewMessagesDocument,
+  CreateMessageProps,
+  CreateMessageComponent,
+  MessagesComponent,
+  MessagesProps,
   MeMe,
   MatcheUserComponent,
-  MatcheUserProps
+  MatcheUserProps,
+  NewMessageDocument
 } from "../../generated/apolloComponents";
 import styled from "styled-components";
 import { Formik, Field } from "formik";
@@ -23,9 +23,9 @@ interface Props {
 }
 
 interface RenderProps {
-  AddNewMessageMutation: AddNewMessageProps;
+  CreateMessageMutation: CreateMessageProps;
 
-  FindMessagesQuery: FindMessagesProps;
+  MessagesQuery: MessagesProps;
   MatcheUserQuery: MatcheUserProps;
 }
 
@@ -47,18 +47,18 @@ export class MessagesController extends React.PureComponent<Props, State> {
   }
   render() {
     const Composed = adopt<RenderProps, {}>({
-      AddNewMessageMutation: ({ render }) => (
-        <AddNewMessageComponent>
-          {(addNewMessage, result) =>
-            render ? render({ addNewMessage, result }) : null
+      CreateMessageMutation: ({ render }) => (
+        <CreateMessageComponent>
+          {(createMessage, result) =>
+            render ? render({ createMessage, result }) : null
           }
-        </AddNewMessageComponent>
+        </CreateMessageComponent>
       ),
 
-      FindMessagesQuery: ({ render }) => (
-        <FindMessagesComponent variables={{ matcheid: this.props.id }}>
+      MessagesQuery: ({ render }) => (
+        <MessagesComponent variables={{ matcheid: this.props.id }}>
           {render}
-        </FindMessagesComponent>
+        </MessagesComponent>
       ),
       MatcheUserQuery: ({ render }) => (
         <MatcheUserComponent variables={{ matcheid: this.props.id }}>
@@ -70,9 +70,9 @@ export class MessagesController extends React.PureComponent<Props, State> {
     return (
       <Composed>
         {({
-          FindMessagesQuery: { loading, data, subscribeToMore },
+          MessagesQuery: { loading, data, subscribeToMore },
           MatcheUserQuery,
-          AddNewMessageMutation: { addNewMessage }
+          CreateMessageMutation: { createMessage }
         }) => {
           let unsubscribe = this.state.unsubscribe;
           const matche = MatcheUserQuery!.data!.matcheuser;
@@ -83,22 +83,22 @@ export class MessagesController extends React.PureComponent<Props, State> {
 
           if (!unsubscribe) {
             unsubscribe = subscribeToMore({
-              document: NewMessagesDocument,
+              document: NewMessageDocument,
               variables: { matcheid: this.props.id },
               updateQuery: (prev: any, { subscriptionData }: any) => {
                 if (!subscriptionData.data) return prev;
-                const { newMessages } = subscriptionData.data;
+                const { newMessage } = subscriptionData.data;
 
                 if (
-                  prev.findMessage[prev.findMessage.length - 1] &&
-                  prev.findMessage[prev.findMessage.length - 1].date ===
-                    newMessages.date
+                  prev.messages[prev.messages.length - 1] &&
+                  prev.messages[prev.messages.length - 1].date ===
+                    newMessage.date
                 ) {
                   return prev;
                 } else {
                   return {
                     ...prev,
-                    findMessage: [...prev.findMessage, newMessages]
+                    messages: [...prev.messages, newMessage]
                   };
                 }
               }
@@ -117,9 +117,9 @@ export class MessagesController extends React.PureComponent<Props, State> {
                 </div>
                 <div className={"messages-content"}>
                   {data
-                    ? data.findMessage.map((d: any, index: number) => {
+                    ? data.messages.map((d: any, index: number) => {
                         const mes =
-                          data.findMessage[data.findMessage.length - 1 - index];
+                          data.messages[data.messages.length - 1 - index];
 
                         return (
                           <div
@@ -140,8 +140,10 @@ export class MessagesController extends React.PureComponent<Props, State> {
                 <Formik
                   onSubmit={async data => {
                     if (data.text !== "") {
-                      await addNewMessage({
-                        variables: { text: data.text, matcheid: matche.id }
+                      await createMessage({
+                        variables: {
+                          message: { matcheId: matche.id, text: data.text }
+                        }
                       });
                     }
                   }}
@@ -186,7 +188,7 @@ const Container = styled.div`
     overflow-y: scroll;
 
     display: flex;
-
+    height: 80%;
     flex-direction: column-reverse;
     ::-webkit-scrollbar {
       width: 0 !important;
@@ -202,7 +204,7 @@ const Container = styled.div`
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    height: 10%;
+    height: 20%;
     border-style: solid;
     border-width: 0px 0 0.05rem 0px;
     border-color: rgba(100, 100, 107, 0.4);
@@ -234,7 +236,7 @@ const Container = styled.div`
     color: #3c3c3c;
     margin-top: 0.25rem;
     margin-bottom: 0.25rem;
-    height: 100%;
+    height: 10%;
     max-width: 82%;
     padding: 0.7rem;
     border-radius: 0.7rem;
@@ -247,7 +249,7 @@ const Container = styled.div`
     color: #3c3c3c;
     margin-top: 0.25rem;
     margin-bottom: 0.25rem;
-    height: 100%;
+    height: 10%;
     max-width: 82%;
     padding: 0.7rem;
     border-radius: 0.7rem;
@@ -283,7 +285,7 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 10%;
+    height: 15%;
 
     margin: 0 0 2% 0;
     padding: 0;

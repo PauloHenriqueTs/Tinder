@@ -40,6 +40,9 @@ export default class MatcheViewController extends React.Component<
   componentWillMount() {
     this.setState({ x: this.props.x, y: this.props.y });
   }
+  componentDidMount() {
+    this.setState({ showprofile: false });
+  }
 
   shouldComponentUpdate(nextpros: MatcheViewControllerProps) {
     const { matche } = this.props;
@@ -86,14 +89,15 @@ export default class MatcheViewController extends React.Component<
               <DeslikeButton
                 onClick={async () => {
                   await this.props.deslike(matche!.id);
-                  this.setState({ showprofile: false });
+                  //this.setState({ showprofile: false });
                 }}
               />
 
               <LikeButton
                 onClick={async () => {
                   await this.props.like(matche!.id);
-                  this.setState({ showprofile: false });
+
+                  // this.setState({ showprofile: false });
                 }}
               />
             </CenterButton>
@@ -107,14 +111,14 @@ export default class MatcheViewController extends React.Component<
               <DeslikeButton
                 onClick={async () => {
                   this.props.deslike(matche!.id);
-                  this.setState({ showprofile: false });
+                  //this.setState({ showprofile: false });
                 }}
               />
 
               <LikeButton
                 onClick={async () => {
                   this.props.like(matche!.id);
-                  this.setState({ showprofile: false });
+                  //  this.setState({ showprofile: false });
                 }}
               />
             </CenterButton>

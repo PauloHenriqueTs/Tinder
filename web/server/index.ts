@@ -13,7 +13,7 @@ app.prepare().then(() => {
     handle(req, res);
   }).listen(port, (err: any) => {
     if (err) throw err;
-    console.log(process.env);
+
     console.log(`> Ready on http://localhost:${port}`);
   });
 });

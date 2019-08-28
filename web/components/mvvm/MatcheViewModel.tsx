@@ -33,7 +33,6 @@ export default class MatcheViewModel extends React.Component<
         variables: { matcheid: matcheid }
       });
       if (res.data.like) {
-        console.log(res.data.like);
         Router.push(`/matches/messages/${matcheid}`);
       }
       return res;
@@ -82,7 +81,6 @@ export default class MatcheViewModel extends React.Component<
                 {({ x, y }) => (
                   <animated.div
                     onClick={async () => {
-                      console.log(delta[0]);
                       if (delta[0] > 200) {
                         await like({
                           variables: { matcheid: data.finduser.id }

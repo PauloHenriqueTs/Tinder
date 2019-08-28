@@ -1,27 +1,23 @@
 export type Maybe<T> = T | null;
 
 export interface MessageInput {
-  text?: Maybe<string>;
+  text: string;
 
   matcheId: string;
 }
-
-/** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
-export type DateTime = any;
 
 // ====================================================
 // Documents
 // ====================================================
 
-export type AddNewMessageVariables = {
-  matcheid: string;
-  text?: Maybe<string>;
+export type CreateMessageVariables = {
+  message: MessageInput;
 };
 
-export type AddNewMessageMutation = {
+export type CreateMessageMutation = {
   __typename?: "Mutation";
 
-  addNewMessage: boolean;
+  createMessage: boolean;
 };
 
 export type DeslikeVariables = {
@@ -44,12 +40,39 @@ export type LikeMutation = {
   like: boolean;
 };
 
+export type LoginVariables = {
+  email: string;
+  password: string;
+};
+
+export type LoginMutation = {
+  __typename?: "Mutation";
+
+  login: LoginLogin;
+};
+
+export type LoginLogin = {
+  __typename?: "LoginResponse";
+
+  errors: Maybe<LoginErrors[]>;
+
+  sessionId: Maybe<string>;
+};
+
+export type LoginErrors = {
+  __typename?: "Error";
+
+  path: string;
+
+  message: string;
+};
+
 export type LogoutVariables = {};
 
 export type LogoutMutation = {
   __typename?: "Mutation";
 
-  logout: boolean;
+  logout: Maybe<boolean>;
 };
 
 export type PickuserVariables = {};
@@ -60,12 +83,24 @@ export type PickuserMutation = {
   pickuser: boolean;
 };
 
-export type HelloVariables = {};
+export type RegisterVariables = {
+  name: string;
+  email: string;
+  password: string;
+};
 
-export type HelloQuery = {
-  __typename?: "Query";
+export type RegisterMutation = {
+  __typename?: "Mutation";
 
-  hello: string;
+  register: Maybe<RegisterRegister[]>;
+};
+
+export type RegisterRegister = {
+  __typename?: "Error";
+
+  path: string;
+
+  message: string;
 };
 
 export type MatcheUserVariables = {
@@ -109,17 +144,15 @@ export type MeMe = {
 
   bio: Maybe<string>;
 
-  lastMessage: Maybe<string>;
+  like: string[];
 
-  like: Maybe<string[]>;
-
-  deslike: Maybe<string[]>;
+  deslike: string[];
 
   matches: Maybe<MeMatches[]>;
 };
 
 export type MeMatches = {
-  __typename?: "matchesLoaderType";
+  __typename?: "MatchesLoader";
 
   User: Maybe<MeUser>;
 
@@ -139,33 +172,31 @@ export type MeUser = {
 
   bio: Maybe<string>;
 
-  lastMessage: Maybe<string>;
+  like: string[];
 
-  like: Maybe<string[]>;
-
-  deslike: Maybe<string[]>;
+  deslike: string[];
 };
 
-export type FindMessagesVariables = {
+export type MessagesVariables = {
   matcheid: string;
 };
 
-export type FindMessagesQuery = {
+export type MessagesQuery = {
   __typename?: "Query";
 
-  findMessage: FindMessagesFindMessage[];
+  messages: MessagesMessages[];
 };
 
-export type FindMessagesFindMessage = {
-  __typename?: "MessageType";
+export type MessagesMessages = {
+  __typename?: "Message";
 
-  text: Maybe<string>;
+  text: string;
 
   userId: string;
 
   matcheId: string;
 
-  date: DateTime;
+  date: string;
 };
 
 export type FindUserVariables = {};
@@ -189,17 +220,15 @@ export type FindUserFinduser = {
 
   bio: Maybe<string>;
 
-  lastMessage: Maybe<string>;
+  like: string[];
 
-  like: Maybe<string[]>;
-
-  deslike: Maybe<string[]>;
+  deslike: string[];
 
   matches: Maybe<FindUserMatches[]>;
 };
 
 export type FindUserMatches = {
-  __typename?: "matchesLoaderType";
+  __typename?: "MatchesLoader";
 
   User: Maybe<FindUserUser>;
 
@@ -212,26 +241,26 @@ export type FindUserUser = {
   id: string;
 };
 
-export type NewMessagesVariables = {
+export type NewMessageVariables = {
   matcheid: string;
 };
 
-export type NewMessagesSubscription = {
+export type NewMessageSubscription = {
   __typename?: "Subscription";
 
-  newMessages: NewMessagesNewMessages;
+  newMessage: NewMessageNewMessage;
 };
 
-export type NewMessagesNewMessages = {
-  __typename?: "MessageType";
+export type NewMessageNewMessage = {
+  __typename?: "Message";
 
-  text: Maybe<string>;
+  text: string;
 
   userId: string;
 
   matcheId: string;
 
-  date: DateTime;
+  date: string;
 };
 
 import * as ReactApollo from "react-apollo";
@@ -243,49 +272,49 @@ import gql from "graphql-tag";
 // Components
 // ====================================================
 
-export const AddNewMessageDocument = gql`
-  mutation AddNewMessage($matcheid: String!, $text: String) {
-    addNewMessage(message: { matcheId: $matcheid, text: $text })
+export const CreateMessageDocument = gql`
+  mutation createMessage($message: MessageInput!) {
+    createMessage(message: $message)
   }
 `;
-export class AddNewMessageComponent extends React.Component<
+export class CreateMessageComponent extends React.Component<
   Partial<
-    ReactApollo.MutationProps<AddNewMessageMutation, AddNewMessageVariables>
+    ReactApollo.MutationProps<CreateMessageMutation, CreateMessageVariables>
   >
 > {
   render() {
     return (
-      <ReactApollo.Mutation<AddNewMessageMutation, AddNewMessageVariables>
-        mutation={AddNewMessageDocument}
+      <ReactApollo.Mutation<CreateMessageMutation, CreateMessageVariables>
+        mutation={CreateMessageDocument}
         {...(this as any)["props"] as any}
       />
     );
   }
 }
-export type AddNewMessageProps<TChildProps = any> = Partial<
-  ReactApollo.MutateProps<AddNewMessageMutation, AddNewMessageVariables>
+export type CreateMessageProps<TChildProps = any> = Partial<
+  ReactApollo.MutateProps<CreateMessageMutation, CreateMessageVariables>
 > &
   TChildProps;
-export type AddNewMessageMutationFn = ReactApollo.MutationFn<
-  AddNewMessageMutation,
-  AddNewMessageVariables
+export type CreateMessageMutationFn = ReactApollo.MutationFn<
+  CreateMessageMutation,
+  CreateMessageVariables
 >;
-export function AddNewMessageHOC<TProps, TChildProps = any>(
+export function CreateMessageHOC<TProps, TChildProps = any>(
   operationOptions:
     | ReactApollo.OperationOption<
         TProps,
-        AddNewMessageMutation,
-        AddNewMessageVariables,
-        AddNewMessageProps<TChildProps>
+        CreateMessageMutation,
+        CreateMessageVariables,
+        CreateMessageProps<TChildProps>
       >
     | undefined
 ) {
   return ReactApollo.graphql<
     TProps,
-    AddNewMessageMutation,
-    AddNewMessageVariables,
-    AddNewMessageProps<TChildProps>
-  >(AddNewMessageDocument, operationOptions);
+    CreateMessageMutation,
+    CreateMessageVariables,
+    CreateMessageProps<TChildProps>
+  >(CreateMessageDocument, operationOptions);
 }
 export const DeslikeDocument = gql`
   mutation Deslike($matcheid: String!) {
@@ -371,6 +400,54 @@ export function LikeHOC<TProps, TChildProps = any>(
     LikeProps<TChildProps>
   >(LikeDocument, operationOptions);
 }
+export const LoginDocument = gql`
+  mutation Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      errors {
+        path
+        message
+      }
+      sessionId
+    }
+  }
+`;
+export class LoginComponent extends React.Component<
+  Partial<ReactApollo.MutationProps<LoginMutation, LoginVariables>>
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<LoginMutation, LoginVariables>
+        mutation={LoginDocument}
+        {...(this as any)["props"] as any}
+      />
+    );
+  }
+}
+export type LoginProps<TChildProps = any> = Partial<
+  ReactApollo.MutateProps<LoginMutation, LoginVariables>
+> &
+  TChildProps;
+export type LoginMutationFn = ReactApollo.MutationFn<
+  LoginMutation,
+  LoginVariables
+>;
+export function LoginHOC<TProps, TChildProps = any>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        LoginMutation,
+        LoginVariables,
+        LoginProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.graphql<
+    TProps,
+    LoginMutation,
+    LoginVariables,
+    LoginProps<TChildProps>
+  >(LoginDocument, operationOptions);
+}
 export const LogoutDocument = gql`
   mutation Logout {
     logout
@@ -455,43 +532,50 @@ export function PickuserHOC<TProps, TChildProps = any>(
     PickuserProps<TChildProps>
   >(PickuserDocument, operationOptions);
 }
-export const HelloDocument = gql`
-  query Hello {
-    hello
+export const RegisterDocument = gql`
+  mutation Register($name: String!, $email: String!, $password: String!) {
+    register(name: $name, email: $email, password: $password) {
+      path
+      message
+    }
   }
 `;
-export class HelloComponent extends React.Component<
-  Partial<ReactApollo.QueryProps<HelloQuery, HelloVariables>>
+export class RegisterComponent extends React.Component<
+  Partial<ReactApollo.MutationProps<RegisterMutation, RegisterVariables>>
 > {
   render() {
     return (
-      <ReactApollo.Query<HelloQuery, HelloVariables>
-        query={HelloDocument}
+      <ReactApollo.Mutation<RegisterMutation, RegisterVariables>
+        mutation={RegisterDocument}
         {...(this as any)["props"] as any}
       />
     );
   }
 }
-export type HelloProps<TChildProps = any> = Partial<
-  ReactApollo.DataProps<HelloQuery, HelloVariables>
+export type RegisterProps<TChildProps = any> = Partial<
+  ReactApollo.MutateProps<RegisterMutation, RegisterVariables>
 > &
   TChildProps;
-export function HelloHOC<TProps, TChildProps = any>(
+export type RegisterMutationFn = ReactApollo.MutationFn<
+  RegisterMutation,
+  RegisterVariables
+>;
+export function RegisterHOC<TProps, TChildProps = any>(
   operationOptions:
     | ReactApollo.OperationOption<
         TProps,
-        HelloQuery,
-        HelloVariables,
-        HelloProps<TChildProps>
+        RegisterMutation,
+        RegisterVariables,
+        RegisterProps<TChildProps>
       >
     | undefined
 ) {
   return ReactApollo.graphql<
     TProps,
-    HelloQuery,
-    HelloVariables,
-    HelloProps<TChildProps>
-  >(HelloDocument, operationOptions);
+    RegisterMutation,
+    RegisterVariables,
+    RegisterProps<TChildProps>
+  >(RegisterDocument, operationOptions);
 }
 export const MatcheUserDocument = gql`
   query MatcheUser($matcheid: String!) {
@@ -543,7 +627,6 @@ export const MeDocument = gql`
       name
       pictureUrl
       bio
-      lastMessage
       like
       deslike
       matches {
@@ -553,7 +636,6 @@ export const MeDocument = gql`
           name
           pictureUrl
           bio
-          lastMessage
           like
           deslike
         }
@@ -595,9 +677,9 @@ export function MeHOC<TProps, TChildProps = any>(
     MeProps<TChildProps>
   >(MeDocument, operationOptions);
 }
-export const FindMessagesDocument = gql`
-  query FindMessages($matcheid: String!) {
-    findMessage(matcheId: $matcheid) {
+export const MessagesDocument = gql`
+  query messages($matcheid: String!) {
+    messages(matcheId: $matcheid) {
       text
       userId
       matcheId
@@ -605,38 +687,38 @@ export const FindMessagesDocument = gql`
     }
   }
 `;
-export class FindMessagesComponent extends React.Component<
-  Partial<ReactApollo.QueryProps<FindMessagesQuery, FindMessagesVariables>>
+export class MessagesComponent extends React.Component<
+  Partial<ReactApollo.QueryProps<MessagesQuery, MessagesVariables>>
 > {
   render() {
     return (
-      <ReactApollo.Query<FindMessagesQuery, FindMessagesVariables>
-        query={FindMessagesDocument}
+      <ReactApollo.Query<MessagesQuery, MessagesVariables>
+        query={MessagesDocument}
         {...(this as any)["props"] as any}
       />
     );
   }
 }
-export type FindMessagesProps<TChildProps = any> = Partial<
-  ReactApollo.DataProps<FindMessagesQuery, FindMessagesVariables>
+export type MessagesProps<TChildProps = any> = Partial<
+  ReactApollo.DataProps<MessagesQuery, MessagesVariables>
 > &
   TChildProps;
-export function FindMessagesHOC<TProps, TChildProps = any>(
+export function MessagesHOC<TProps, TChildProps = any>(
   operationOptions:
     | ReactApollo.OperationOption<
         TProps,
-        FindMessagesQuery,
-        FindMessagesVariables,
-        FindMessagesProps<TChildProps>
+        MessagesQuery,
+        MessagesVariables,
+        MessagesProps<TChildProps>
       >
     | undefined
 ) {
   return ReactApollo.graphql<
     TProps,
-    FindMessagesQuery,
-    FindMessagesVariables,
-    FindMessagesProps<TChildProps>
-  >(FindMessagesDocument, operationOptions);
+    MessagesQuery,
+    MessagesVariables,
+    MessagesProps<TChildProps>
+  >(MessagesDocument, operationOptions);
 }
 export const FindUserDocument = gql`
   subscription FindUser {
@@ -646,7 +728,6 @@ export const FindUserDocument = gql`
       name
       pictureUrl
       bio
-      lastMessage
       like
       deslike
       matches {
@@ -693,9 +774,9 @@ export function FindUserHOC<TProps, TChildProps = any>(
     FindUserProps<TChildProps>
   >(FindUserDocument, operationOptions);
 }
-export const NewMessagesDocument = gql`
-  subscription NewMessages($matcheid: String!) {
-    newMessages(matcheId: $matcheid) {
+export const NewMessageDocument = gql`
+  subscription newMessage($matcheid: String!) {
+    newMessage(matcheId: $matcheid) {
       text
       userId
       matcheId
@@ -703,38 +784,38 @@ export const NewMessagesDocument = gql`
     }
   }
 `;
-export class NewMessagesComponent extends React.Component<
+export class NewMessageComponent extends React.Component<
   Partial<
-    ReactApollo.SubscriptionProps<NewMessagesSubscription, NewMessagesVariables>
+    ReactApollo.SubscriptionProps<NewMessageSubscription, NewMessageVariables>
   >
 > {
   render() {
     return (
-      <ReactApollo.Subscription<NewMessagesSubscription, NewMessagesVariables>
-        subscription={NewMessagesDocument}
+      <ReactApollo.Subscription<NewMessageSubscription, NewMessageVariables>
+        subscription={NewMessageDocument}
         {...(this as any)["props"] as any}
       />
     );
   }
 }
-export type NewMessagesProps<TChildProps = any> = Partial<
-  ReactApollo.DataProps<NewMessagesSubscription, NewMessagesVariables>
+export type NewMessageProps<TChildProps = any> = Partial<
+  ReactApollo.DataProps<NewMessageSubscription, NewMessageVariables>
 > &
   TChildProps;
-export function NewMessagesHOC<TProps, TChildProps = any>(
+export function NewMessageHOC<TProps, TChildProps = any>(
   operationOptions:
     | ReactApollo.OperationOption<
         TProps,
-        NewMessagesSubscription,
-        NewMessagesVariables,
-        NewMessagesProps<TChildProps>
+        NewMessageSubscription,
+        NewMessageVariables,
+        NewMessageProps<TChildProps>
       >
     | undefined
 ) {
   return ReactApollo.graphql<
     TProps,
-    NewMessagesSubscription,
-    NewMessagesVariables,
-    NewMessagesProps<TChildProps>
-  >(NewMessagesDocument, operationOptions);
+    NewMessageSubscription,
+    NewMessageVariables,
+    NewMessageProps<TChildProps>
+  >(NewMessageDocument, operationOptions);
 }

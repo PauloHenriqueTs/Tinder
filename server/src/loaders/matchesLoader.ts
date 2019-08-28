@@ -6,7 +6,7 @@ import { Message } from "../entity/Message";
 import { matchesLoaderType } from "./matchesLoaderType";
 import { User } from "../entity/User";
 
-const batchMatches = async (meID: string[]) => {
+export const batchMatches = async (meID: string[]) => {
   const matches = await Matches.find({
     join: {
       alias: "matches",
@@ -16,6 +16,7 @@ const batchMatches = async (meID: string[]) => {
       }
     }
   });
+
   const messages = await Message.find();
 
   const MatchesMap: { [key: string]: User[] } = {};
@@ -45,7 +46,7 @@ function FindMatchesofThatUser(
   id: string,
   MatchesMap: { [key: string]: User[] },
   m: Matches
-): Boolean {
+): boolean {
   if (!MatchesMap[id]) {
     if (m.first_like_userid === id) {
       MatchesMap[id] = [(m as any).__last_like_user__];
@@ -80,7 +81,6 @@ function ReturnLastMessage(
       return false;
     }
   });
-  console.log(matchesMessage);
 
   if (matchesMessage[0]) {
     const lastMessageDate = matchesMessage
@@ -90,12 +90,17 @@ function ReturnLastMessage(
       .shift();
 
     const lastMessage = matchesMessage.reduce((res, mes) => {
-      if (mes.date === lastMessageDate) return mes;
-      else return res;
+      if (mes.date === lastMessageDate) {
+        return mes;
+      } else {
+        return res;
+      }
     });
 
     return lastMessage;
-  } else return null;
+  } else {
+    return null;
+  }
 }
 
 function CreateMatchesWithLastMessage(
@@ -103,7 +108,7 @@ function CreateMatchesWithLastMessage(
   MatchesMap: { [key: string]: matchesLoaderType[] },
   m: User,
   lastMessage: Message | null
-): Boolean {
+): boolean {
   if (lastMessage) {
     if (!MatchesMap[id]) {
       MatchesMap[id] = [{ User: m, lastMessage: lastMessage!.text }];

@@ -1,8 +1,8 @@
 import { gql } from "apollo-boost";
 
-export const FindMessagesQuery = gql`
-  query FindMessages($matcheid: String!) {
-    findMessage(matcheId: $matcheid) {
+export const MessagesQuery = gql`
+  query messages($matcheid: String!) {
+    messages(matcheId: $matcheid) {
       text
       userId
       matcheId

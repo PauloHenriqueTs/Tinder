@@ -1,47 +1,41 @@
+import * as bcrypt from "bcryptjs";
 import {
   Entity,
-  PrimaryGeneratedColumn,
   Column,
   BaseEntity,
+  PrimaryGeneratedColumn,
+  BeforeInsert,
   OneToMany
 } from "typeorm";
-import { ObjectType, Field, ID, Ctx } from "type-graphql";
 import { Matches } from "./Matches";
-import { MyContext } from "../types/Context";
-import { matchesLoaderType } from "../loaders/matchesLoaderType";
 
-@ObjectType()
-@Entity()
+@Entity("users")
 export class User extends BaseEntity {
-  @Field(() => ID)
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
+  @PrimaryGeneratedColumn("uuid") id: string;
 
-  @Field(() => String)
   @Column({ type: "text", unique: true })
   email: string;
 
-  @Field(() => String)
+  @Column("text") password: string;
+
+  @Column("boolean", { default: false })
+  confirmed: boolean;
+
+  @Column("boolean", { default: false })
+  forgotPasswordLocked: boolean;
+
   @Column({ type: "text" })
   name: string;
 
-  @Field(() => String, { nullable: true })
   @Column({ type: "text", nullable: true })
   pictureUrl: string;
 
-  @Field(() => String, { nullable: true })
   @Column({ type: "text", nullable: true })
   bio: string;
 
-  @Field(() => String, { nullable: true })
-  @Column({ type: "text", nullable: true })
-  lastMessage: string;
-
-  @Field(() => [String], { nullable: true })
   @Column({ type: "simple-array", nullable: true })
   like: string[] = [];
 
-  @Field(() => [String], { nullable: true })
   @Column({ type: "simple-array", nullable: true })
   deslike: string[] = [];
 
@@ -51,10 +45,8 @@ export class User extends BaseEntity {
   @OneToMany(() => Matches, m => m.last_like_user)
   last_like_user_Connection: Promise<Matches[]>;
 
-  @Field(() => [matchesLoaderType], { nullable: true })
-  async matches(@Ctx() { matchesLoader }: MyContext): Promise<
-    matchesLoaderType[]
-  > {
-    return matchesLoader.load(this.id);
+  @BeforeInsert()
+  async hashPasswordBeforeInsert() {
+    this.password = await bcrypt.hash(this.password, 10);
   }
 }

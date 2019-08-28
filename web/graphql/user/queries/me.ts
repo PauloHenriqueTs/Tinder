@@ -8,7 +8,6 @@ export const meQuery = gql`
       name
       pictureUrl
       bio
-      lastMessage
       like
       deslike
       matches {
@@ -18,7 +17,6 @@ export const meQuery = gql`
           name
           pictureUrl
           bio
-          lastMessage
           like
           deslike
         }

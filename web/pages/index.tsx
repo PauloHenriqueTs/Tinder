@@ -10,7 +10,7 @@ IndexPage.getInitialProps = async ({ apolloClient, ...ctx }: MyContext) => {
   const { data } = await apolloClient.query<MeQuery>({ query: meQuery });
 
   if (!data.me) {
-    redirect(ctx, "/FacebookLogin");
+    redirect(ctx, "/login");
   } else {
     redirect(ctx, "/matches");
   }

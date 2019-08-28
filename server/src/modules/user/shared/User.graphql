@@ -1,0 +1,15 @@
+type User {
+  id: ID!
+  email: String!
+  name: String!
+  pictureUrl: String
+  bio: String
+  like: [String!]
+  deslike: [String!]
+  matches: [MatchesLoader!]
+}
+
+type MatchesLoader {
+  User: User
+  lastMessage: String
+}
