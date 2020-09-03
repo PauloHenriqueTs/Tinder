@@ -52,7 +52,7 @@
     "eslint-plugin-jsx-a11y": "6.x",
     "eslint-plugin-react": "7.x",
     "eslint-plugin-react-hooks": "1.6.1",
-    "graphql-code-generator": "^0.16.0",
+    "graphql-code-generator": "^0.18.2",
     "graphql-codegen-typescript-client": "^0.16.0",
     "graphql-codegen-typescript-common": "^0.16.0",
     "graphql-codegen-typescript-react-apollo": "^0.16.0",
