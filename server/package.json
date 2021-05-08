@@ -71,7 +71,7 @@
     "shortid": "2.2.12",
     "sparkpost": "2.1.2",
     "typedi": "^0.8.0",
-    "typeorm": "0.2.11",
+    "typeorm": "0.2.25",
     "uuid": "3.2.1",
     "yup": "0.24.1"
   },
